@@ -24,6 +24,7 @@ class Page:
     provider: str
     use: int | None          # pinned version number, None = latest
     notes: str = ""
+    caption: str = ""
 
 
 class Book:
@@ -47,7 +48,7 @@ class Book:
         self.pages = [
             Page(id=str(p["id"]), scene=p.get("scene", ""), characters=p.get("characters", []),
                  age=str(p.get("age", self.age)), provider=p.get("provider", self.provider),
-                 use=p.get("use"), notes=p.get("notes", ""))
+                 use=p.get("use"), notes=p.get("notes", ""), caption=p.get("caption", ""))
             for p in d.get("pages", [])
         ]
         for sub in ("raw", "clean", "vector", "out"):

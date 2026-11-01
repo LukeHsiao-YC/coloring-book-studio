@@ -60,7 +60,8 @@ def _test_colors(c, pw, ph):
 FRONT_MATTER = {"belongs_to": _belongs_to, "test_colors": _test_colors}
 
 
-def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_backs: bool, out: Path) -> int:
+def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_backs: bool, out: Path,
+                   captions: list[str] | None = None) -> int:
     pw, ph = (v * inch for v in config.TRIM_SIZES[trim])
     bw, bh = (v * inch for v in art_box(trim))
     m = config.ART_SAFE_MARGIN_IN * inch
@@ -82,8 +83,18 @@ def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_b
         blank()
         if blank_backs:
             blank()
-    for svg in svgs:
-        _draw_svg(c, svg, m, m, bw, bh)
+    captions = captions or [""] * len(svgs)
+    for svg, cap in zip(svgs, captions):
+        if cap:                        # caption sits under the art, inside the safe margin
+            size = 26
+            c.setFont("CBS-Bold", size)
+            while c.stringWidth(cap, "CBS-Bold", size) > bw and size > 14:
+                size -= 1
+                c.setFont("CBS-Bold", size)
+            c.drawCentredString(pw / 2, m + 0.1 * inch, cap)
+            _draw_svg(c, svg, m, m + 0.75 * inch, bw, bh - 0.75 * inch)
+        else:
+            _draw_svg(c, svg, m, m, bw, bh)
         blank()
         if blank_backs:
             blank()

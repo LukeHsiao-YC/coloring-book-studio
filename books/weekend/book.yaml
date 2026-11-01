@@ -1,0 +1,124 @@
+# 第一本書：週末做什麼
+# 核心概念：週末除了看電視、玩手機，還有很多有趣的活動；找到讓自己開心的活動，就是很棒的週末。
+# 結構：開場（無聊滑手機）→ 13 種活動 → 結尾（找到讓自己開心的事）＝ 15 張圖
+# 頁數：前置 2 頁（各有背面）4 頁 + 15 張圖（各有背面）30 頁 ＝ 34 頁
+title: "What Shall We Do This Weekend?"
+subtitle: "A Coloring Book for Kids Ages 6-9"
+author: ""
+trim: 8.5x11
+paper: white
+age: "6-9"
+provider: gemini
+blank_backs: true
+front_matter: [belongs_to, test_colors]
+cast: cats
+cover_page: p15
+
+pages:
+  - id: p01
+    caption: "What shall we do this weekend?"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      Living room. Xiao Hei lies on the sofa looking bored at a smartphone, Xiao Bai sits on the floor
+      watching a TV with a blank screen, looking sleepy. Xiao Huang stands at a big window, pointing outside
+      with an excited face. Background: sofa, TV on a low cabinet, window with a tree outside, one rug.
+
+  - id: p02
+    caption: "Drawing"
+    characters: [小白, 小黃]
+    scene: >-
+      Xiao Bai stands at an easel painting a big simple flower with a brush. Xiao Huang sits nearby
+      holding a sketchbook and a crayon, smiling. Background: a paint palette, a jar of brushes, a table.
+
+  - id: p03
+    caption: "Playing board games"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      All three cats sit around a low table playing a board game with a big game board, two large dice
+      and a few game pieces. Xiao Hei is rolling the dice, Xiao Bai cheers, Xiao Huang thinks with a paw on its chin.
+
+  - id: p04
+    caption: "Cooking together"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      Kitchen. The three cats make a pizza together at a counter: Xiao Hei spreads sauce, Xiao Bai adds
+      big round toppings, Xiao Huang holds a rolling pin. All wear simple aprons over their jackets.
+      Background: an oven, a cooking pot, a big bowl.
+
+  - id: p05
+    caption: "Reading"
+    characters: [小黃, 小白]
+    scene: >-
+      Cozy reading corner. Xiao Huang sits on a big beanbag reading an open picture book. Xiao Bai lies on
+      the floor on its tummy reading another book. Background: a bookshelf with large books, a floor lamp, one cushion.
+
+  - id: p06
+    caption: "Listening to music"
+    characters: [小黑]
+    scene: >-
+      Xiao Hei sits cross-legged wearing big headphones, eyes half closed, enjoying music and tapping a paw.
+      Next to it a record player. Four large music notes float in the air. Background: a window, a potted plant.
+
+  - id: p07
+    caption: "Camping"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      Night camping. A large triangle tent, a small campfire with big simple flames. Xiao Hei and Xiao Huang
+      roast marshmallows on sticks, Xiao Bai sits wrapped in a blanket looking up. Background: a big moon,
+      four large stars, two pine trees.
+
+  - id: p08
+    caption: "Riding bikes"
+    characters: [小黑, 小黃]
+    scene: >-
+      Xiao Hei and Xiao Huang ride bicycles along a curving path, both wearing helmets, Xiao Huang waving.
+      Background: rolling hills, two trees, a few big clouds.
+
+  - id: p09
+    caption: "Going for a walk"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      The three cats walk side by side along a path in the countryside. Xiao Bai holds a small leaf,
+      Xiao Huang points at a butterfly. Background: a fence, two trees, one large butterfly, a few big clouds.
+
+  - id: p10
+    caption: "Dancing"
+    characters: [小白, 小黑, 小黃]
+    scene: >-
+      Xiao Bai and Xiao Hei dance happily in a living room with arms up, Xiao Huang claps along.
+      A speaker on the floor with three large music notes. Background: a curtain, one lamp.
+
+  - id: p11
+    caption: "Playing at the park"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      Playground. Xiao Huang slides down a big slide with arms up, Xiao Bai sits on a swing,
+      Xiao Hei climbs a small climbing frame. Background: one tree, a bench, the sun.
+
+  - id: p12
+    caption: "Visiting a flower shop"
+    characters: [小白, 小黃]
+    scene: >-
+      Inside a small flower shop. Xiao Bai smells a big bouquet of large simple flowers, Xiao Huang carries
+      a potted sunflower. Background: three buckets of large flowers, a shop counter, a hanging sign with no text.
+
+  - id: p13
+    caption: "Playing tag"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      Grassy field. Xiao Huang runs with arms stretched out trying to tag the others, Xiao Bai and Xiao Hei
+      run away laughing. Background: two trees, a few bushes, big clouds.
+
+  - id: p14
+    caption: "Playing catch"
+    characters: [小黑, 小黃]
+    scene: >-
+      Park. Xiao Hei throws a large ball high in the air, Xiao Huang jumps up with paws open to catch it.
+      Background: a tree, a bench, a few big clouds.
+
+  - id: p15
+    caption: "Find what makes YOU happy!"
+    characters: [小黑, 小白, 小黃]
+    scene: >-
+      The three cats stand together smiling and waving at the reader. Around them, a few large simple objects
+      from the weekend: a paintbrush, a die, a book, a ball and a flower. Big heart shape behind them.

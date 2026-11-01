@@ -18,6 +18,7 @@ pages:
     characters: [小黃]
     scene: Xiao Huang sitting on the ground holding a big beach ball above its head. One simple sun in a corner.
   - id: p03
+    caption: "Having a picnic"
     age: "6-9"
     characters: [小黑, 小白, 小黃]
     scene: >-

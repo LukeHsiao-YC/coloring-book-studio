@@ -56,6 +56,22 @@ def cmd_prompt(a):
         print("\n[記得一併上傳角色參考圖：" + ", ".join(str(r) for r in b.cast.references) + "]")
 
 
+def cmd_prompts(a):
+    """All page prompts in one Markdown file, for generating in the Gemini / ChatGPT web app."""
+    from .prompts import build_prompt
+    b = Book(a.book)
+    lines = [f"# {b.title}：每頁提示詞", "",
+             "在 Gemini 或 ChatGPT 開一個新對話，第一則訊息先上傳角色參考圖："
+             + "、".join(r.name for r in (b.cast.references if b.cast else [])) + "，然後依序貼上每一頁。", ""]
+    for p in b.pages:
+        if a.missing and b.versions(p.id):
+            continue
+        lines += [f"## {p.id}" + (f"：{p.caption}" if p.caption else ""), "", "```", build_prompt(b, p), "```", ""]
+    out = b.dir / "prompts.md"
+    out.write_text("\n".join(lines), encoding="utf-8")
+    print(f"→ {out}")
+
+
 def cmd_gen(a):
     from .generate import generate_page
     b = Book(a.book)
@@ -92,7 +108,7 @@ def cmd_build(a):
 
     b = Book(a.book)
     box = art_box(b.trim)
-    metrics, svgs, rows, missing = [], [], [], []
+    metrics, svgs, rows, missing, caps = [], [], [], [], []
     for p in b.pages:
         raw = b.selected_raw(p)
         if not raw:
@@ -101,6 +117,7 @@ def cmd_build(a):
         m = clean_and_vectorize(raw, b.dir / "clean", b.dir / "vector", p.id, p.age, box)
         metrics.append(m)
         svgs.append(Path(m["svg"]))
+        caps.append(p.caption)
         side = raw.with_suffix(".txt")
         prov = side.read_text(encoding="utf-8").split(":", 1)[1].strip() if side.exists() else "?"
         rows.append(dict(page=p.id, version=raw.stem.rsplit("_v", 1)[1], provider=prov.split(" ")[0],
@@ -111,7 +128,7 @@ def cmd_build(a):
 
     out = b.dir / "out"
     interior = out / "interior.pdf"
-    n = build_interior(b.trim, svgs, b.front_matter, b.blank_backs, interior)
+    n = build_interior(b.trim, svgs, b.front_matter, b.blank_backs, interior, caps)
     errors, warns = check_interior(interior, b.trim, metrics, {p.id: p.age for p in b.pages})
     if missing:
         warns.insert(0, f"尚無圖片、未排入的頁面：{', '.join(missing)}")
@@ -144,6 +161,9 @@ def main():
     s.add_argument("--age", default="3-5", choices=list(config.AGE_PRESETS)); s.set_defaults(f=cmd_new)
     s = sub.add_parser("prompt", help="印出某頁的完整提示詞（手動生圖用）")
     s.add_argument("book"); s.add_argument("page"); s.set_defaults(f=cmd_prompt)
+    s = sub.add_parser("prompts", help="把所有頁面的提示詞存成 prompts.md（網頁版生圖用）")
+    s.add_argument("book"); s.add_argument("--missing", action="store_true", help="只列還沒有圖的頁面")
+    s.set_defaults(f=cmd_prompts)
     s = sub.add_parser("gen", help="用 API 生圖（不指定頁面＝全部）")
     s.add_argument("book"); s.add_argument("pages", nargs="*")
     s.add_argument("--provider", choices=["gemini", "openai"])
