@@ -59,8 +59,8 @@ open -e .env                             # 填入 GEMINI_API_KEY / OPENAI_API_KE
 
 ```yaml
   - id: p05
-    characters: [gray, tabby]      # 出場角色（cast.yaml 裡的代號）
-    scene: Gray Cat and Tabby Cat building a sandcastle at the beach.
+    characters: [小黑, 小黃]      # 出場角色（cast.yaml 裡的代號）
+    scene: Xiao Hei and Xiao Huang building a sandcastle at the beach.
     age: "6-9"                     # 選填，覆寫整本書的年齡
     provider: openai               # 選填，這頁改用別家
     notes: make the sandcastle bigger   # 選填，額外指示

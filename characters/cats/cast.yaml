@@ -7,14 +7,14 @@ reference_images:
   - lineart_sheet.jpg
 
 characters:
-  gray:
-    name: Gray Cat
+  小黑:
+    name: Xiao Hei (the dark gray cat)
     look: fluffy cheek tufts, pointed ears, half-closed confident eyes, small smirk, long tail. Cool, playful personality.
-  white:
-    name: White Cat
+  小白:
+    name: Xiao Bai (the white cat)
     look: big round eyes, small blush marks on cheeks, sweet shy expression, thin curled tail.
-  tabby:
-    name: Tabby Cat
+  小黃:
+    name: Xiao Huang (the tabby cat)
     look: stripes on forehead, cheeks and legs, happy closed eyes, relaxed smile, striped tail.
 
 shared: >-

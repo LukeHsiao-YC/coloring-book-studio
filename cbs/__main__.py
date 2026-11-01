@@ -30,11 +30,11 @@ cover_page: p01       # 封面用哪一頁的圖
 
 pages:
   - id: p01
-    characters: [white]
-    scene: White Cat hugging a big round apple with both arms, smiling.
+    characters: [小白]
+    scene: Xiao Bai hugging a big round apple with both arms, smiling.
   - id: p02
-    characters: [tabby]
-    scene: Tabby Cat sitting on the ground holding a big beach ball above its head. One simple sun in a corner.
+    characters: [小黃]
+    scene: Xiao Huang sitting on the ground holding a big beach ball above its head. One simple sun in a corner.
 """
 
 

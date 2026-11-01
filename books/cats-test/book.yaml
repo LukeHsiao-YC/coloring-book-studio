@@ -12,19 +12,19 @@ cover_page: p04
 
 pages:
   - id: p01
-    characters: [white]
-    scene: White Cat hugging a big round apple with both arms, smiling.
+    characters: [小白]
+    scene: Xiao Bai hugging a big round apple with both arms, smiling.
   - id: p02
-    characters: [tabby]
-    scene: Tabby Cat sitting on the ground holding a big beach ball above its head. One simple sun in a corner.
+    characters: [小黃]
+    scene: Xiao Huang sitting on the ground holding a big beach ball above its head. One simple sun in a corner.
   - id: p03
     age: "6-9"
-    characters: [gray, white, tabby]
+    characters: [小黑, 小白, 小黃]
     scene: >-
-      All three cats having a picnic in a park. Gray Cat holding a sandwich and making a peace sign,
-      White Cat pouring juice into a cup, Tabby Cat lying on the picnic blanket with eyes closed.
+      All three cats having a picnic in a park. Xiao Hei holding a sandwich and making a peace sign,
+      Xiao Bai pouring juice into a cup, Xiao Huang lying on the picnic blanket with eyes closed.
       Background: one large tree, a picnic blanket with a simple checkered pattern, a basket, two clouds.
   - id: p04
     age: "6-9"
-    characters: [gray, white, tabby]
+    characters: [小黑, 小白, 小黃]
     scene: All three cats standing side by side, front view.
