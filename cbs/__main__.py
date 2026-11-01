@@ -122,7 +122,8 @@ def cmd_build(a):
         prov = side.read_text(encoding="utf-8").split(":", 1)[1].strip() if side.exists() else "?"
         rows.append(dict(page=p.id, version=raw.stem.rsplit("_v", 1)[1], provider=prov.split(" ")[0],
                          raw=raw, clean=b.dir / "clean" / f"{p.id}.png"))
-        print(f"✓ {p.id}  線條 {m['stroke_mm']} mm  小區塊 {m['tiny_regions']}  灰階 {m['gray_pct']}%")
+        thick = f"（原 {m['original_stroke_mm']} mm，已加粗）" if m["stroke_mm"] != m["original_stroke_mm"] else ""
+        print(f"✓ {p.id}  線條 {m['stroke_mm']} mm{thick}  小區塊 {m['tiny_regions']}  灰階 {m['gray_pct']}%")
     if not svgs:
         sys.exit("沒有任何頁面有圖片")
 

@@ -1,0 +1,1 @@
+provider: manual (bccfcff4-image.jpg)

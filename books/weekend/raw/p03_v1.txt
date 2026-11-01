@@ -1,0 +1,1 @@
+provider: manual (bd145f4a-image.jpg)

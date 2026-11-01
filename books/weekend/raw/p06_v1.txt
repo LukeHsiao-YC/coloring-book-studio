@@ -1,0 +1,1 @@
+provider: manual (efa40fe2-image.jpg)

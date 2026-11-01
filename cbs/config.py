@@ -19,6 +19,10 @@ OUTSIDE_MARGIN_BLEED = 0.375
 SPINE_PER_PAGE = {"white": 0.002252, "cream": 0.0025}
 SPINE_TEXT_MIN_PAGES = 79    # KDP allows spine text only from this page count
 
+# Thicken lines that come out thinner than the age preset's minimum (pixels on the 2x working image)
+AUTO_THICKEN = True
+AUTO_THICKEN_MAX_PX = 8
+
 # Our own safe zone for artwork (stricter than KDP's minimum, so nothing gets trimmed)
 ART_SAFE_MARGIN_IN = 0.75
 

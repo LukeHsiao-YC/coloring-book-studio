@@ -52,13 +52,24 @@ def clean_and_vectorize(raw: Path, clean_dir: Path, vector_dir: Path, page_id: s
     in_per_px = min(art_box_in[0] / cw, art_box_in[1] / ch)
     raster_dpi = 1 / (in_per_px * 2)
 
-    # typical stroke width: ridge of the distance transform
-    dt = cv2.distanceTransform(ink, cv2.DIST_L2, 3)
-    ridge = dt[(dt >= cv2.dilate(dt, np.ones((3, 3))) - 1e-6) & (dt > 0.5)]
-    stroke_mm = float(np.median(ridge) * 2 * in_per_px * 25.4) if ridge.size else 0.0
+    def stroke(ink_img):   # typical stroke width: ridge of the distance transform
+        dt = cv2.distanceTransform(ink_img, cv2.DIST_L2, 3)
+        ridge = dt[(dt >= cv2.dilate(dt, np.ones((3, 3))) - 1e-6) & (dt > 0.5)]
+        return float(np.median(ridge) * 2 * in_per_px * 25.4) if ridge.size else 0.0
+
+    preset = config.AGE_PRESETS[age]
+    stroke_mm = original_stroke = stroke(ink)
+    # lines thinner than the age preset are thickened evenly (all strokes grow by the same amount)
+    lo = preset["target_stroke_mm"][0]
+    if config.AUTO_THICKEN and 0 < stroke_mm < lo:
+        grow_px = int(round((lo + 0.1 - stroke_mm) / 2 / 25.4 / in_per_px))
+        grow_px = min(grow_px, config.AUTO_THICKEN_MAX_PX)
+        if grow_px > 0:
+            k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * grow_px + 1, 2 * grow_px + 1))
+            ink = cv2.dilate(ink, k)
+            stroke_mm = stroke(ink)
 
     # enclosed white areas too small for the age group
-    preset = config.AGE_PRESETS[age]
     r_px = (preset["min_region_mm"] / 2) / 25.4 / in_per_px
     n, _, st, _ = cv2.connectedComponentsWithStats((1 - ink).astype(np.uint8), 4)
     areas = st[1:, cv2.CC_STAT_AREA]
@@ -73,5 +84,6 @@ def clean_and_vectorize(raw: Path, clean_dir: Path, vector_dir: Path, page_id: s
     subprocess.run([_potrace_bin(), str(pbm), "-s", "-t", "8", "-O", "0.3", "-o", str(svg)], check=True)
 
     return dict(page=page_id, source=raw.name, source_px=f"{w0}x{h0}", gray_pct=round(gray_pct, 1),
-                raster_dpi=round(raster_dpi), stroke_mm=round(stroke_mm, 2), tiny_regions=tiny,
+                raster_dpi=round(raster_dpi), stroke_mm=round(stroke_mm, 2),
+                original_stroke_mm=round(original_stroke, 2), tiny_regions=tiny,
                 regions=int(n - 1), touches_edge=touches_edge, svg=str(svg))
