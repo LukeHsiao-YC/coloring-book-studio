@@ -1,0 +1,1 @@
+provider: manual (Gemini_提示詞2.jpg)

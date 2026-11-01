@@ -1,0 +1,30 @@
+title: "Three Cats Coloring Book"
+subtitle: "Test build"
+author: ""
+trim: 8.5x11
+paper: white
+age: "3-5"
+provider: gemini
+blank_backs: true
+front_matter: [belongs_to, test_colors]
+cast: cats
+cover_page: p04
+
+pages:
+  - id: p01
+    characters: [white]
+    scene: White Cat hugging a big round apple with both arms, smiling.
+  - id: p02
+    characters: [tabby]
+    scene: Tabby Cat sitting on the ground holding a big beach ball above its head. One simple sun in a corner.
+  - id: p03
+    age: "6-9"
+    characters: [gray, white, tabby]
+    scene: >-
+      All three cats having a picnic in a park. Gray Cat holding a sandwich and making a peace sign,
+      White Cat pouring juice into a cup, Tabby Cat lying on the picnic blanket with eyes closed.
+      Background: one large tree, a picnic blanket with a simple checkered pattern, a basket, two clouds.
+  - id: p04
+    age: "6-9"
+    characters: [gray, white, tabby]
+    scene: All three cats standing side by side, front view.

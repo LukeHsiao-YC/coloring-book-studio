@@ -1,0 +1,1 @@
+provider: manual (OpenAI提示詞2.png)

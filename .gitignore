@@ -1,0 +1,7 @@
+.env
+__pycache__/
+.venv/
+books/*/clean/
+books/*/vector/
+books/*/out/
+.DS_Store

@@ -1,0 +1,24 @@
+# 角色設定：三隻貓（Luke 原創設計）
+# reference_images 會在每次生圖時附給 AI，讓角色保持一致。
+#   reference.png      原始彩色設計稿
+#   lineart_sheet.jpg  已確認過的線稿版角色表（2026-11-01 測試，Gemini 提示詞 1）
+reference_images:
+  - reference.png
+  - lineart_sheet.jpg
+
+characters:
+  gray:
+    name: Gray Cat
+    look: fluffy cheek tufts, pointed ears, half-closed confident eyes, small smirk, long tail. Cool, playful personality.
+  white:
+    name: White Cat
+    look: big round eyes, small blush marks on cheeks, sweet shy expression, thin curled tail.
+  tabby:
+    name: Tabby Cat
+    look: stripes on forehead, cheeks and legs, happy closed eyes, relaxed smile, striped tail.
+
+shared: >-
+  All cats wear the same white zip-up jacket and shorts.
+  The jacket has a small chest logo that must be copied EXACTLY as it appears in the reference images
+  (one Korean character followed by the letters CAT); never mirror, misspell or omit it unless it is hidden by the pose.
+  Same proportions as the reference: big head, small body, short legs.
