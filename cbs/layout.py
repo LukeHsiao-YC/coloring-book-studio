@@ -24,9 +24,17 @@ rl_config.canvas_basefontname = "CBS"
 STATE_DEFAULTS["fontName"] = "CBS"
 
 
+def margin(trim: str) -> float:
+    return config.ART_SAFE_MARGIN_BY_TRIM.get(trim, config.ART_SAFE_MARGIN_IN)
+
+
+def caption_band(trim: str) -> float:
+    return config.CAPTION_BAND_IN.get(trim, 0.75)
+
+
 def art_box(trim: str) -> tuple[float, float]:
     w, h = config.TRIM_SIZES[trim]
-    m = config.ART_SAFE_MARGIN_IN
+    m = margin(trim)
     return (w - 2 * m, h - 2 * m)
 
 
@@ -64,7 +72,8 @@ def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_b
                    captions: list[str] | None = None) -> int:
     pw, ph = (v * inch for v in config.TRIM_SIZES[trim])
     bw, bh = (v * inch for v in art_box(trim))
-    m = config.ART_SAFE_MARGIN_IN * inch
+    m = margin(trim) * inch
+    cb = caption_band(trim) * inch
     c = canvas.Canvas(str(out), pagesize=(pw, ph), pageCompression=1, initialFontName="CBS")
     c.setTitle("")
     c.setAuthor("")
@@ -86,13 +95,13 @@ def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_b
     captions = captions or [""] * len(svgs)
     for svg, cap in zip(svgs, captions):
         if cap:                        # caption sits under the art, inside the safe margin
-            size = 26
+            size = 26 if cb >= 0.75 * inch else 18
             c.setFont("CBS-Bold", size)
             while c.stringWidth(cap, "CBS-Bold", size) > bw and size > 14:
                 size -= 1
                 c.setFont("CBS-Bold", size)
             c.drawCentredString(pw / 2, m + 0.1 * inch, cap)
-            _draw_svg(c, svg, m, m + 0.75 * inch, bw, bh - 0.75 * inch)
+            _draw_svg(c, svg, m, m + cb, bw, bh - cb)
         else:
             _draw_svg(c, svg, m, m, bw, bh)
         blank()

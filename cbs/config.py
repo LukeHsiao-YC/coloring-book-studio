@@ -5,6 +5,7 @@ TRIM_SIZES = {               # inches (width, height)
     "8.5x11": (8.5, 11.0),
     "8.5x8.5": (8.5, 8.5),
     "8x10": (8.0, 10.0),
+    "8.25x6": (8.25, 6.0),   # landscape
 }
 BLEED_IN = 0.125             # added top, bottom and outside edge when bleed is on
 MIN_PAGES = 24               # KDP paperback minimum
@@ -25,6 +26,8 @@ AUTO_THICKEN_MAX_PX = 8
 
 # Our own safe zone for artwork (stricter than KDP's minimum, so nothing gets trimmed)
 ART_SAFE_MARGIN_IN = 0.75
+ART_SAFE_MARGIN_BY_TRIM = {"8.25x6": 0.5}   # small pages get a tighter (still KDP-safe) margin
+CAPTION_BAND_IN = {"8.25x6": 0.5}          # height reserved for a caption; default 0.75
 
 # ---------- Age presets ----------
 AGE_PRESETS = {
