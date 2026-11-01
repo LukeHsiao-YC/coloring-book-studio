@@ -1,24 +1,35 @@
-# 角色設定：三隻貓（Luke 原創設計）
+# 角色設定：小黑、小黃、小白（Luke 原創設計，2026-11-01 第二版底圖）
 # reference_images 會在每次生圖時附給 AI，讓角色保持一致。
-#   reference.png      原始彩色設計稿
-#   lineart_sheet.jpg  已確認過的線稿版角色表（2026-11-01 測試，Gemini 提示詞 1）
+#   reference.jpg      彩色設計稿（第二版）
+#   lineart_sheet.jpg  Luke 親手畫的線稿版（第二版），也是線條風格的標準
+# 第一版底圖保留在 old/，不再使用。
 reference_images:
-  - reference.png
+  - reference.jpg
   - lineart_sheet.jpg
 
 characters:
   小黑:
     name: Xiao Hei (the dark gray cat)
-    look: fluffy cheek tufts, pointed ears, half-closed confident eyes, small smirk, long tail. Cool, playful personality.
+    look: >-
+      very tall pointed ears, a little fluffy fur on the cheeks, large oval eyes with flat half-closed upper lids
+      (a cool, unimpressed look), tiny "w"-shaped mouth.
   小白:
     name: Xiao Bai (the white cat)
-    look: big round eyes, small blush marks on cheeks, sweet shy expression, thin curled tail.
+    look: >-
+      very tall pointed ears, a little fluffy fur on the cheeks, huge round open eyes, three short blush lines
+      on each cheek, tiny "w"-shaped mouth.
   小黃:
     name: Xiao Huang (the tabby cat)
-    look: stripes on forehead, cheeks and legs, happy closed eyes, relaxed smile, striped tail.
+    look: >-
+      shorter rounder ears, softly rounded head, gently closed eyes drawn as short lines, a few short stripes
+      on the forehead, cheeks and legs, tiny "w"-shaped mouth, relaxed happy face.
 
 shared: >-
-  All cats wear the same white zip-up jacket and shorts.
-  The jacket has a small chest logo that must be copied EXACTLY as it appears in the reference images
-  (one Korean character followed by the letters CAT); never mirror, misspell or omit it unless it is hidden by the pose.
-  Same proportions as the reference: big head, small body, short legs.
+  Style: simple, cute, hand-drawn look with thick even black outlines, exactly like the attached line-art sheet.
+  Body shape: chibi proportions with a big head about as large as the body, a boxy body, short stubby legs,
+  and round mitten-like paws with no fingers drawn. Keep the bodies simple and boxy, not realistic cats.
+  All three wear the same plain white boxy zip-up jacket (one vertical zipper line with a small arrow-shaped
+  zipper pull at the top) and plain shorts. The jacket has a small chest logo on the right side of the zipper
+  that must be copied EXACTLY as it appears in the reference images (one Korean character followed by the
+  letters CAT); never mirror, misspell or omit it unless it is hidden by the pose.
+  Tails are not shown in the reference; if a pose shows a tail, keep it short and simple.
