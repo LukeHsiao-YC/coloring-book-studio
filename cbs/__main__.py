@@ -64,7 +64,7 @@ def cmd_prompts(a):
              "在 Gemini 或 ChatGPT 開一個新對話，第一則訊息先上傳角色參考圖："
              + "、".join(r.name for r in (b.cast.references if b.cast else [])) + "，然後依序貼上每一頁。", ""]
     for p in b.pages:
-        if a.missing and b.versions(p.id):
+        if p.type != "coloring" or (a.missing and b.versions(p.id)):
             continue
         lines += [f"## {p.id}" + (f"：{p.caption}" if p.caption else ""), "", "```", build_prompt(b, p), "```", ""]
     out = b.dir / "prompts.md"
@@ -75,7 +75,7 @@ def cmd_prompts(a):
 def cmd_gen(a):
     from .generate import generate_page
     b = Book(a.book)
-    targets = [b.page(p) for p in a.pages] if a.pages else b.pages
+    targets = [b.page(p) for p in a.pages] if a.pages else [p for p in b.pages if p.type == "coloring"]
     if a.missing:
         targets = [p for p in targets if not b.versions(p.id)]
     for p in targets:
@@ -95,9 +95,25 @@ def cmd_import(a):
 def cmd_status(a):
     b = Book(a.book)
     for p in b.pages:
+        if p.type != "coloring":
+            print(f"{p.id:6} 活動頁 {p.type}")
+            continue
         vs = b.versions(p.id)
         sel = b.selected_raw(p)
         print(f"{p.id:6} {p.age:4} {p.provider:7} 版本 {list(vs) or '-'}  使用 {sel.name if sel else '（尚無圖）'}")
+
+
+def pricing(pages: int) -> str:
+    c = config
+    cost = c.PRINT_FIXED_USD + max(0, pages - c.PRINT_FIXED_MAX_PAGES) * c.PRINT_PER_PAGE_USD
+    lines = [f"定價試算（Amazon.com，{pages} 頁，印刷成本約 ${cost:.2f}，請以 KDP 計算機為準）",
+             "  售價    版稅率  每本實拿   廣告打平 ACoS"]
+    for price in c.PRICE_POINTS_USD:
+        rate = c.ROYALTY_RATE_HIGH if price >= c.ROYALTY_THRESHOLD_USD else c.ROYALTY_RATE_LOW
+        net = price * rate - cost
+        acos = f"{net / price * 100:5.1f}%" if net > 0 else "  —"
+        lines.append(f"  ${price:<6} {int(rate * 100)}%    ${net:5.2f}     {acos}")
+    return "\n".join(lines)
 
 
 def cmd_build(a):
@@ -106,30 +122,54 @@ def cmd_build(a):
     from .preflight import check_interior
     from .preview import contact_sheet
 
+    from .activities import ACTIVITIES
+
     b = Book(a.book)
     box = art_box(b.trim)
-    metrics, svgs, rows, missing, caps = [], [], [], [], []
+    metrics, rows, missing = [], [], []
+    items = {}
+    # pass 1: coloring pages (activities such as spot-the-difference reuse their cleaned art)
     for p in b.pages:
+        if p.type != "coloring":
+            if p.type not in ACTIVITIES:
+                sys.exit(f"{p.id}: 不認得的頁面類型 '{p.type}'，可用：coloring, {', '.join(ACTIVITIES)}")
+            continue
         raw = b.selected_raw(p)
         if not raw:
             missing.append(p.id)
             continue
         m = clean_and_vectorize(raw, b.dir / "clean", b.dir / "vector", p.id, p.age, box)
         metrics.append(m)
-        svgs.append(Path(m["svg"]))
-        caps.append(p.caption)
+        items[p.id] = dict(kind="art", svg=Path(m["svg"]), caption=p.caption)
         side = raw.with_suffix(".txt")
         prov = side.read_text(encoding="utf-8").split(":", 1)[1].strip() if side.exists() else "?"
         rows.append(dict(page=p.id, version=raw.stem.rsplit("_v", 1)[1], provider=prov.split(" ")[0],
                          raw=raw, clean=b.dir / "clean" / f"{p.id}.png"))
         thick = f"（原 {m['original_stroke_mm']} mm，已加粗）" if m["stroke_mm"] != m["original_stroke_mm"] else ""
         print(f"✓ {p.id}  線條 {m['stroke_mm']} mm{thick}  小區塊 {m['tiny_regions']}  灰階 {m['gray_pct']}%")
-    if not svgs:
-        sys.exit("沒有任何頁面有圖片")
+
+    # pass 2: activity pages
+    answers = []
+    icons = b.cast.icons if b.cast else {}
+    for p in b.pages:
+        if p.type == "coloring":
+            continue
+        prepare, draw, answer = ACTIVITIES[p.type]
+        ctx = dict(book=b, page=p, spec=p.spec or {}, icons=icons)
+        state = prepare(ctx) if prepare else {}
+        items[p.id] = dict(kind="activity", draw=lambda c, bx, d=draw, s=state, x=ctx: d(c, bx, s, x))
+        if answer and b.answers:
+            label = (p.spec or {}).get("title") or p.type
+            answers.append((label, lambda c, bx, f=answer, s=state, x=ctx: f(c, bx, s, x)))
+        print(f"✓ {p.id}  活動頁：{p.type}")
+    ordered = [items[p.id] for p in b.pages if p.id in items]
+    if not ordered:
+        sys.exit("沒有任何頁面可以排版")
 
     out = b.dir / "out"
     interior = out / "interior.pdf"
-    n = build_interior(b.trim, svgs, b.front_matter, b.blank_backs, interior, caps)
+    n = build_interior(b.trim, ordered, b.front_matter, b.blank_backs, interior,
+                       back_note=(b.back_page == "note"), answers=answers)
     errors, warns = check_interior(interior, b.trim, metrics, {p.id: p.age for p in b.pages})
     if missing:
         warns.insert(0, f"尚無圖片、未排入的頁面：{', '.join(missing)}")
@@ -149,6 +189,8 @@ def cmd_build(a):
              "預覽：out/preview.png", ""]
     lines += [f"✗ {e}" for e in errors] or ["✓ 沒有會被 KDP 退件的錯誤"]
     lines += [f"! {w}" for w in warns]
+    n_designs = len(ordered)
+    lines += ["", f"設計數：{n_designs}（著色 {len(metrics)}、活動 {n_designs - len(metrics)}）", "", pricing(n)]
     report = "\n".join(lines)
     (out / "report.txt").write_text(report, encoding="utf-8")
     print("\n" + report)

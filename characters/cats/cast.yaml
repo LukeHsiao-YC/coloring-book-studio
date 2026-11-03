@@ -33,3 +33,9 @@ shared: >-
   that must be copied EXACTLY as it appears in the reference images (one Korean character followed by the
   letters CAT); never mirror, misspell or omit it unless it is hidden by the pose.
   Tails are not shown in the reference; if a pose shows a tail, keep it short and simple.
+
+# 活動頁用的小圖示（從 Luke 的手繪線稿裁切，是人類原創作品）
+icons:
+  小黑: icons/xiaohei.png
+  小黃: icons/xiaohuang.png
+  小白: icons/xiaobai.png

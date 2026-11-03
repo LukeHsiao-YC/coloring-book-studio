@@ -38,12 +38,27 @@ def art_box(trim: str) -> tuple[float, float]:
     return (w - 2 * m, h - 2 * m)
 
 
-def _draw_svg(c, svg: Path, x: float, y: float, box_w: float, box_h: float):
+def place_svg(c, svg: Path, x: float, y: float, box_w: float, box_h: float):
+    """Draw an SVG centred in the box; returns (left, bottom, scale, svg_width, svg_height)."""
     d = svg2rlg(str(svg))
-    s = min(box_w / d.width, box_h / d.height)
+    W, H = d.width, d.height
+    s = min(box_w / W, box_h / H)
     d.scale(s, s)
-    w, h = d.width * s, d.height * s
-    renderPDF.draw(d, c, x + (box_w - w) / 2, y + (box_h - h) / 2)
+    ox, oy = x + (box_w - W * s) / 2, y + (box_h - H * s) / 2
+    renderPDF.draw(d, c, ox, oy)
+    return ox, oy, s, W, H
+
+
+_draw_svg = place_svg
+
+
+BACK_NOTE = ("This page is left blank on purpose to stop markers bleeding through. "
+             "Tip: slide a sheet of paper behind the page you are coloring.")
+
+
+def _back_note(c, pw, m):
+    c.setFont("CBS", 8.5)
+    c.drawCentredString(pw / 2, m, BACK_NOTE)
 
 
 def _belongs_to(c, pw, ph):
@@ -68,8 +83,10 @@ def _test_colors(c, pw, ph):
 FRONT_MATTER = {"belongs_to": _belongs_to, "test_colors": _test_colors}
 
 
-def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_backs: bool, out: Path,
-                   captions: list[str] | None = None) -> int:
+def build_interior(trim: str, items: list[dict], front_matter: list[str], blank_backs: bool, out: Path,
+                   back_note: bool = True, answers: list[tuple] | None = None) -> int:
+    """items: dict(kind="art", svg=Path, caption=str) or dict(kind="activity", draw=fn(c, box)).
+    answers: list of (label, fn(c, box)) drawn on answer pages at the end."""
     pw, ph = (v * inch for v in config.TRIM_SIZES[trim])
     bw, bh = (v * inch for v in art_box(trim))
     m = margin(trim) * inch
@@ -85,6 +102,12 @@ def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_b
         c.showPage()
         pages += 1
 
+    def back():
+        if blank_backs:
+            if back_note:
+                _back_note(c, pw, m)
+            blank()
+
     for fm in front_matter:
         if fm not in FRONT_MATTER:
             raise SystemExit(f"front_matter 不認得 '{fm}'，可用：{list(FRONT_MATTER)}")
@@ -92,21 +115,39 @@ def build_interior(trim: str, svgs: list[Path], front_matter: list[str], blank_b
         blank()
         if blank_backs:
             blank()
-    captions = captions or [""] * len(svgs)
-    for svg, cap in zip(svgs, captions):
-        if cap:                        # caption sits under the art, inside the safe margin
+    for it in items:
+        if it["kind"] == "activity":
+            c.saveState()
+            it["draw"](c, (m, m, bw, bh))
+            c.restoreState()
+        elif it.get("caption"):        # caption sits under the art, inside the safe margin
+            cap = it["caption"]
             size = 26 if cb >= 0.75 * inch else 18
-            c.setFont("CBS-Bold", size)
             while c.stringWidth(cap, "CBS-Bold", size) > bw and size > 14:
                 size -= 1
-                c.setFont("CBS-Bold", size)
+            c.setFont("CBS-Bold", size)
             c.drawCentredString(pw / 2, m + 0.1 * inch, cap)
-            _draw_svg(c, svg, m, m + cb, bw, bh - cb)
+            place_svg(c, it["svg"], m, m + cb, bw, bh - cb)
         else:
-            _draw_svg(c, svg, m, m, bw, bh)
+            place_svg(c, it["svg"], m, m, bw, bh)
         blank()
-        if blank_backs:
-            blank()
+        back()
+    # answer pages: up to two answers per page
+    answers = answers or []
+    for i in range(0, len(answers), 2):
+        c.setFont("CBS-Bold", 28)
+        c.drawCentredString(pw / 2, ph - m - 28, "Answers")
+        top = ph - m - 0.7 * inch
+        chunk = answers[i:i + 2]
+        slot = (top - m) / 2
+        for j, (label, fn) in enumerate(chunk):
+            sy = top - (j + 1) * slot
+            c.setFont("CBS-Bold", 15)
+            c.drawString(m, sy + slot - 18, label)
+            c.saveState()
+            fn(c, (m, sy + 0.1 * inch, bw, slot - 0.5 * inch))
+            c.restoreState()
+        blank()
     if pages % 2:                      # end on an even page count
         blank()
     c.save()

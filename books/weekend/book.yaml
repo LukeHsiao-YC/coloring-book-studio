@@ -1,7 +1,7 @@
 # 第一本書：週末做什麼
 # 核心概念：週末除了看電視、玩手機，還有很多有趣的活動；找到讓自己開心的活動，就是很棒的週末。
 # 結構：開場（無聊滑手機）→ 13 種活動 → 結尾（找到讓自己開心的事）＝ 15 張圖
-# 頁數：前置 2 頁（各有背面）4 頁 + 15 張圖（各有背面）30 頁 ＝ 34 頁
+# 2026-11-03 起：15 張著色圖 + 10 頁活動（程式產生）＝ 25 個設計
 title: "What Shall We Do This Weekend?"
 subtitle: "A Coloring Book for Kids Ages 6-9"
 author: ""
@@ -11,6 +11,8 @@ age: "6-9"
 provider: gemini
 blank_backs: true
 front_matter: [belongs_to, test_colors]
+back_page: note      # 背面空白頁印防透色提示（blank = 純白）
+answers: true        # 書末附迷宮、找不同的解答
 cast: cats
 cover_page: p15
 
@@ -52,6 +54,11 @@ pages:
       Cozy reading corner. Xiao Huang sits on a big beanbag reading an open picture book. Xiao Bai lies on
       the floor on its tummy reading another book. Background: a bookshelf with large books, a floor lamp, one cushion.
 
+  - id: a01
+    type: tracing
+    title: "Trace the words!"
+    words: [DRAW, PLAY, COOK, READ]
+
   - id: p06
     caption: "Listening to music"
     characters: [小黑]
@@ -66,6 +73,19 @@ pages:
       Night camping. A large triangle tent, a small campfire with big simple flames. Xiao Hei and Xiao Huang
       roast marshmallows on sticks, Xiao Bai sits wrapped in a blanket looking up. Background: a big moon,
       four large stars, two pine trees.
+
+  - id: a02
+    type: spot_difference
+    source: p07
+    count: 5
+    title: "Find 5 differences at the campsite!"
+
+  - id: a03
+    type: dot_to_dot
+    shape: star
+    icon: 小白
+    title: "What does Xiao Bai see in the sky?"
+    text: "Connect the dots from 1 to 10."
 
   - id: p08
     caption: "Riding bikes"
@@ -95,6 +115,12 @@ pages:
       Playground. Xiao Huang slides down a big slide with arms up, Xiao Bai sits on a swing,
       Xiao Hei climbs a small climbing frame. Background: one tree, a bench, the sun.
 
+  - id: a04
+    type: maze
+    start: 小黃
+    goal: tree
+    title: "Help Xiao Huang get to the park!"
+
   - id: p12
     caption: "Visiting a flower shop"
     characters: [小白, 小黃]
@@ -109,6 +135,11 @@ pages:
       Grassy field. Xiao Huang runs with arms stretched out trying to tag the others, Xiao Bai and Xiao Hei
       run away laughing. Background: two trees, a few bushes, big clouds.
 
+  - id: a05
+    type: tracing
+    title: "Trace the words!"
+    words: [DANCE, WALK, CAMP, BIKE]
+
   - id: p14
     caption: "Playing catch"
     characters: [小黑, 小黃]
@@ -116,9 +147,39 @@ pages:
       Park. Xiao Hei throws a large ball high in the air, Xiao Huang jumps up with paws open to catch it.
       Background: a tree, a bench, a few big clouds.
 
+  - id: a06
+    type: maze
+    start: 小黑
+    goal: ball
+    title: "Help Xiao Hei find the ball!"
+
+  - id: a07
+    type: dot_to_dot
+    shape: heart
+    icon: 小黃
+    title: "What makes Xiao Huang happy?"
+    text: "Connect the dots from 1 to 20."
+
   - id: p15
     caption: "Find what makes YOU happy!"
     characters: [小黑, 小白, 小黃]
     scene: >-
       The three cats stand together smiling and waving at the reader. Around them, a few large simple objects
       from the weekend: a paintbrush, a die, a book, a ball and a flower. Big heart shape behind them.
+
+  - id: a08
+    type: plan
+    title: "My Weekend Plan"
+    icon: 小黃
+    ideas: [Drawing, Board games, Cooking, Reading, Music, Camping, Riding a bike, Going for a walk, Dancing, The park]
+
+  - id: a09
+    type: draw
+    title: "Draw your favorite weekend activity!"
+    icon: 小白
+    lines: ["My favorite activity is", "It makes me happy because"]
+
+  - id: a10
+    type: challenge
+    title: "Screen-Free Challenge"
+    text: "Color a star each day you try a fun activity instead of a screen!"

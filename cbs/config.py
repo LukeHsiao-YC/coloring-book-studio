@@ -20,6 +20,17 @@ OUTSIDE_MARGIN_BLEED = 0.375
 SPINE_PER_PAGE = {"white": 0.002252, "cream": 0.0025}
 SPINE_TEXT_MIN_PAGES = 79    # KDP allows spine text only from this page count
 
+# Pricing (Amazon.com paperback). Royalty split is from KDP's help page (checked 2026-11-03).
+# The print cost figures are NOT confirmed for large trim: sources disagree ($2.15 vs $2.84).
+# Check KDP's calculator after uploading and update PRINT_FIXED_USD.
+ROYALTY_RATE_HIGH = 0.60          # list price >= 9.99
+ROYALTY_RATE_LOW = 0.50           # list price <= 9.98
+ROYALTY_THRESHOLD_USD = 9.99
+PRINT_FIXED_USD = 2.84            # black ink, fixed up to PRINT_FIXED_MAX_PAGES (verify!)
+PRINT_FIXED_MAX_PAGES = 108
+PRINT_PER_PAGE_USD = 0.017        # each page above the fixed range (verify!)
+PRICE_POINTS_USD = [5.99, 6.99, 7.99, 8.99, 9.99]
+
 # Thicken lines that come out thinner than the age preset's minimum (pixels on the 2x working image)
 AUTO_THICKEN = True
 AUTO_THICKEN_MAX_PX = 8
@@ -33,7 +44,7 @@ CAPTION_BAND_IN = {"8.25x6": 0.5}          # height reserved for a caption; defa
 AGE_PRESETS = {
     "3-5": {
         "label": "3–5 歲",
-        "target_stroke_mm": (2.0, 3.5),   # preflight warns outside this range
+        "target_stroke_mm": (1.8, 3.0),   # 5–8 pt; preflight warns outside this range
         "max_tiny_regions": 15,           # enclosed areas smaller than min_region_mm
         "min_region_mm": 6.0,
         "prompt": (
@@ -44,7 +55,7 @@ AGE_PRESETS = {
     },
     "6-9": {
         "label": "6–9 歲",
-        "target_stroke_mm": (0.9, 2.0),
+        "target_stroke_mm": (1.1, 2.0),   # 3–5 pt is 1.06–1.76 mm
         "max_tiny_regions": 60,
         "min_region_mm": 4.0,
         "prompt": (

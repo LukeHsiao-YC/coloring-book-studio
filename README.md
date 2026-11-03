@@ -67,6 +67,25 @@ open -e .env                             # 填入 GEMINI_API_KEY / OPENAI_API_KE
     use: 2                         # 選填，指定使用第幾版
 ```
 
+## 活動頁（程式產生，不用生圖）
+
+在 book.yaml 的頁面加上 `type:` 就會變成活動頁：
+
+| type | 內容 | 常用設定 |
+|---|---|---|
+| `maze` | 迷宮，起點放角色、終點放圖案 | `start: 小黃`、`goal: tree / tent / house / flower / ball`、`rows`、`cols`、`seed` |
+| `tracing` | 描寫英文字，下方有書寫線 | `words: [DRAW, READ]`（最多 5 個） |
+| `dot_to_dot` | 連連看 | `shape: star / heart / tent / house / fish`、`icon: 小白` |
+| `spot_difference` | 找不同：從一張著色頁自動拿掉幾個小物件 | `source: p07`、`count: 5`、`seed`（換數字就換一組差異） |
+| `plan` | 週末計畫表＋想嘗試的活動勾選清單 | `days`、`slots`、`ideas` |
+| `draw` | 自由畫框＋書寫句 | `lines: ["My favorite activity is"]` |
+| `challenge` | 一週挑戰表，每天塗一顆星 | `text`、`days` |
+
+每頁都可以設 `title:`。迷宮和找不同的解答會自動放在書末（`answers: false` 可關閉）。
+背面空白頁預設印一行防透色提示（`back_page: blank` 可改成純白）。
+
+`report.txt` 最後有定價試算。印刷成本在 `cbs/config.py` 的 `PRINT_FIXED_USD`，上傳 KDP 後請用官方計算機核對並更新。
+
 ## 規格檢查（report.txt）
 
 - `✗` 錯誤：上傳 KDP 會被退件（頁數不足 24、尺寸不對、字型未內嵌等），必須修正。

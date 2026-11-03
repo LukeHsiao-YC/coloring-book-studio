@@ -25,6 +25,8 @@ class Page:
     use: int | None          # pinned version number, None = latest
     notes: str = ""
     caption: str = ""
+    type: str = "coloring"   # coloring, or an activity type (see cbs/activities.py)
+    spec: dict | None = None  # the page's full entry from book.yaml
 
 
 class Book:
@@ -44,11 +46,15 @@ class Book:
         self.provider = d.get("provider", config.DEFAULT_PROVIDER)
         self.blank_backs = bool(d.get("blank_backs", True))
         self.front_matter = d.get("front_matter", ["belongs_to"])
+        self.back_page = d.get("back_page", "note")      # blank / note
+        self.answers = bool(d.get("answers", True))       # answer page for mazes and spot-the-difference
+        self.price = d.get("price")
         self.cast = Cast(d["cast"]) if d.get("cast") else None
         self.pages = [
             Page(id=str(p["id"]), scene=p.get("scene", ""), characters=p.get("characters", []),
                  age=str(p.get("age", self.age)), provider=p.get("provider", self.provider),
-                 use=p.get("use"), notes=p.get("notes", ""), caption=p.get("caption", ""))
+                 use=p.get("use"), notes=p.get("notes", ""), caption=p.get("caption", ""),
+                 type=p.get("type", "coloring"), spec=p)
             for p in d.get("pages", [])
         ]
         for sub in ("raw", "clean", "vector", "out"):
@@ -93,6 +99,7 @@ class Cast:
         self.data = yaml.safe_load(f.read_text(encoding="utf-8"))
         self.members = self.data.get("characters", {})
         self.references = [self.dir / r for r in self.data.get("reference_images", [])]
+        self.icons = {k: self.dir / v for k, v in (self.data.get("icons") or {}).items()}
         for r in self.references:
             if not r.exists():
                 raise SystemExit(f"角色參考圖不存在：{r}")
