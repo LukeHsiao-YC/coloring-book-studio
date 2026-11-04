@@ -78,6 +78,7 @@ pages:
     type: spot_difference
     source: p07
     count: 5
+    remove: [5, 20, 22, 25, 28]   # 編號見 out/a02_candidates.png：星星、小黑的 CAT、棉花糖烤痕、小黃的韓文字、小火焰
     title: "Find 5 differences at the campsite!"
 
   - id: a03

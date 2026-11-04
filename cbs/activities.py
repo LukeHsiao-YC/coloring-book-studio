@@ -328,34 +328,66 @@ def spot_prepare(ctx):
     wn, wlab = cv2.connectedComponents((1 - ink).astype(np.uint8), connectivity=4)
     border = set(np.unique(np.concatenate([wlab[0], wlab[-1], wlab[:, 0], wlab[:, -1]]))) - {0}
     kernel = np.ones((7, 7), np.uint8)
-    cands = []
+    cands = []     # (label, x0, y0, w, h, kind)
     for i in range(1, n):
         x0, y0, bw, bh, area = st[i]
-        if not (H * W * 0.0003 < area < H * W * 0.008):   # small objects only
+        if not (H * W * 0.00004 < area < H * W * 0.008):
             continue
-        if min(bw, bh) < 0.025 * W or x0 < 5 or y0 < 5 or x0 + bw > W - 5 or y0 + bh > H - 5:
+        if min(bw, bh) < 0.008 * W or x0 < 5 or y0 < 5 or x0 + bw > W - 5 or y0 + bh > H - 5:
             continue
         sub = (lab[max(y0 - 4, 0):y0 + bh + 4, max(x0 - 4, 0):x0 + bw + 4] == i).astype(np.uint8)
         # fill the object's own holes (the inside of a star), so only its outside is checked
         ff = sub.copy()
         cv2.floodFill(ff, np.zeros((ff.shape[0] + 2, ff.shape[1] + 2), np.uint8), (0, 0), 2)
-        sub = (ff != 2).astype(np.uint8)
-        ring = cv2.dilate(sub, kernel) - sub
+        solid = (ff != 2).astype(np.uint8)
+        ring = cv2.dilate(solid, kernel) - solid
         around = set(np.unique(wlab[max(y0 - 4, 0):y0 + bh + 4, max(x0 - 4, 0):x0 + bw + 4][ring > 0])) - {0}
-        if around and around <= border:      # a stand-alone object, not a detail inside a character
-            cands.append((i, x0, y0, bw, bh))
-    rnd = random.Random(s.get("seed", ctx["page"].id))
-    rnd.shuffle(cands)
+        if not around:
+            continue
+        if around <= border:
+            if area > H * W * 0.0003 and min(bw, bh) > 0.025 * W:
+                cands.append((i, x0, y0, bw, bh, "scene"))
+        elif area < H * W * 0.003:
+            cands.append((i, x0, y0, bw, bh, "detail"))
+    cands.sort(key=lambda c: (c[2] // max(1, H // 12), c[1]))       # reading order, numbered from 1
+
+    # contact sheet with numbered candidates, so a person can choose with `remove: [..]`
+    sheet = cv2.cvtColor((1 - ink) * 255, cv2.COLOR_GRAY2BGR)
+    for k, (_, x0, y0, bw, bh, kind) in enumerate(cands, 1):
+        col = (0, 140, 255) if kind == "scene" else (220, 60, 0)
+        cv2.rectangle(sheet, (x0 - 6, y0 - 6), (x0 + bw + 6, y0 + bh + 6), col, 6)
+        cv2.putText(sheet, str(k), (x0, max(y0 - 12, 40)), cv2.FONT_HERSHEY_SIMPLEX, 2.2, col, 6)
+    sheet_path = b.dir / "out" / f"{ctx['page'].id}_candidates.png"
+    cv2.imwrite(str(sheet_path), cv2.resize(sheet, (W // 2, H // 2)))
+
     count = int(s.get("count", 5))
-    picked, mind = [], 0.12 * math.hypot(W, H)
-    for cnd in cands:
-        cx, cy = cnd[1] + cnd[3] / 2, cnd[2] + cnd[4] / 2
-        if all(math.hypot(cx - p[1] - p[3] / 2, cy - p[2] - p[4] / 2) > mind for p in picked):
-            picked.append(cnd)
-        if len(picked) == count:
-            break
+    if s.get("remove"):
+        picked = []
+        for k in s["remove"]:
+            if not 1 <= int(k) <= len(cands):
+                raise SystemExit(f"{ctx['page'].id}: remove 的編號 {k} 不存在（候選 1–{len(cands)}，見 {sheet_path.name}）")
+            picked.append(cands[int(k) - 1][:5])
+    else:   # automatic: at most `scene_max` background objects, the rest small marks, spread out
+        rnd = random.Random(s.get("seed", ctx["page"].id))
+        scene = [c[:5] for c in cands if c[5] == "scene"]
+        detail = [c[:5] for c in cands if c[5] == "detail" and max(c[3], c[4]) < 0.05 * W]
+        rnd.shuffle(scene)
+        rnd.shuffle(detail)
+        scene_max = int(s.get("scene_max", 1))
+        picked, mind = [], 0.1 * math.hypot(W, H)
+
+        def far(cnd):
+            cx, cy = cnd[1] + cnd[3] / 2, cnd[2] + cnd[4] / 2
+            return all(math.hypot(cx - p[1] - p[3] / 2, cy - p[2] - p[4] / 2) > mind for p in picked)
+
+        for pool, limit in ((scene, min(scene_max, count)), (detail, count), (scene, count)):
+            for cnd in pool:
+                if len(picked) >= limit:
+                    break
+                if cnd not in picked and far(cnd):
+                    picked.append(cnd)
     if len(picked) < 3:
-        raise SystemExit(f"{ctx['page'].id}: 來源頁 {src} 找不到足夠的獨立小物件（星星、石頭、花等），請換一頁")
+        raise SystemExit(f"{ctx['page'].id}: 來源頁 {src} 找不到足夠可以拿掉的小物件，請換一頁")
     changed = ink.copy()
     for i, *_ in picked:
         changed[lab == i] = 0

@@ -76,7 +76,7 @@ open -e .env                             # 填入 GEMINI_API_KEY / OPENAI_API_KE
 | `maze` | 迷宮，起點放角色、終點放圖案 | `start: 小黃`、`goal: tree / tent / house / flower / ball`、`rows`、`cols`、`seed` |
 | `tracing` | 描寫英文字，下方有書寫線 | `words: [DRAW, READ]`（最多 5 個） |
 | `dot_to_dot` | 連連看 | `shape: star / heart / tent / house / fish`、`icon: 小白` |
-| `spot_difference` | 找不同：從一張著色頁自動拿掉幾個小物件 | `source: p07`、`count: 5`、`seed`（換數字就換一組差異） |
+| `spot_difference` | 找不同：從一張著色頁拿掉幾個小物件。每次 build 會產生 `out/<頁碼>_candidates.png`，把可拿掉的物件編號標出來 | `source: p07`、`remove: [5, 20, 22]`（照編號人工挑選，建議用這個）；不寫 remove 時自動挑：`count`、`scene_max`（背景物件最多幾個，預設 1）、`seed` |
 | `plan` | 週末計畫表＋想嘗試的活動勾選清單 | `days`、`slots`、`ideas` |
 | `draw` | 自由畫框＋書寫句 | `lines: ["My favorite activity is"]` |
 | `challenge` | 一週挑戰表，每天塗一顆星 | `text`、`days` |
