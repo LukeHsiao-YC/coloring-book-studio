@@ -133,6 +133,12 @@ def build_color_cover(book, edition: str, pages: int, out: Path) -> tuple[dict, 
     cx = (front_x0 + front_x1) / 2
     max_w = tw * inch - 2 * safe
     y = H - b - safe - 0.15 * inch
+    series = front.get("series", book.data.get("series"))
+    if series:
+        s = _fit_text(c, series.upper(), ROUND, 17, max_w)
+        y -= s
+        _outlined(c, series.upper(), cx, y, ROUND, s, cfg.get("accent", "#e4572e"), width=s * 0.24)
+        y -= 0.16 * inch
     if front.get("title_zh"):
         s = _fit_text(c, front["title_zh"], ROUND, 74, max_w)
         y -= s
@@ -161,6 +167,12 @@ def build_color_cover(book, edition: str, pages: int, out: Path) -> tuple[dict, 
             c.setFillColor(HexColor(ink))
             c.setFont(ROUND, s)
             c.drawCentredString(bx, by + (len(lines) - 1) * lh / 2 - k * lh - s * 0.35, ln)
+
+    # author along the bottom of the front (must match the author entered on KDP)
+    author = front.get("author", book.data.get("author"))
+    if author:
+        s = _fit_text(c, author, ROUND, 22, max_w)
+        _outlined(c, author, cx, b + safe + 0.05 * inch, ROUND, s, ink, width=s * 0.22)
 
     # ---- back panel
     bx0, bx1 = back_x0 + safe, back_x1 - safe

@@ -59,7 +59,8 @@ zhuyin:
   音樂: "ㄧㄣ ㄩㄝˋ"
   跟著: "ㄍㄣ ˙ㄓㄜ"
   挑戰: "ㄊㄧㄠˇ ㄓㄢˋ"
-author: ""
+author: "Luke Hsiao & Leo Hsiao"   # 封面上的作者名要和 KDP 填的作者一致
+series: "The CAT Crew"
 trim: 8.5x11
 paper: white
 age: "6-9"
