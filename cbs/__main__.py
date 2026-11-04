@@ -218,9 +218,15 @@ def cmd_build(a):
         title = meta.get("title", b.title)
         cover_id = b.data.get("cover_page") or b.pages[0].id
         cover_svg = b.dir / "vector" / f"{cover_id}.svg"
-        size = build_cover(b.trim, n, b.paper, title, meta.get("subtitle", b.data.get("subtitle", "")),
-                           b.data.get("author", ""), cover_svg if cover_svg.exists() else None,
-                           out / "cover.pdf", title_zh=meta.get("title_zh", "") if lang == "zh" else "")
+        cover_art = b.dir / (b.data.get("cover") or {}).get("art", "cover/front_art.png")
+        if cover_art.exists():
+            from .cover import build_color_cover
+            size, cover_warn = build_color_cover(b, ed, n, out / "cover.pdf")
+            warns += cover_warn
+        else:   # no art yet: black-and-white proof cover with the right dimensions
+            size = build_cover(b.trim, n, b.paper, title, meta.get("subtitle", b.data.get("subtitle", "")),
+                               b.data.get("author", ""), cover_svg if cover_svg.exists() else None,
+                               out / "cover.pdf", title_zh=meta.get("title_zh", "") if lang == "zh" else "")
         extra = []
         if lang == "zh":
             from .zhuyin import check_table

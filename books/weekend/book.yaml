@@ -9,10 +9,47 @@ editions:
   en:
     title: "What Shall We Do This Weekend?"
     subtitle: "A Coloring and Activity Book for Kids Ages 6-9"
+    front:
+      title_lines: ["What Shall We Do", "This Weekend?"]
+      subtitle: "A Coloring & Activity Book"
+      badge: ["Ages", "6-9"]
+    back:
+      headline: "Phones and TV can wait!"
+      text:
+        - "Join three curious cats as they find out how much fun a weekend can be: painting, board games, making pizza, camping, riding bikes, dancing and more."
+      bullets:
+        - "15 coloring pages, each with a short rhyme"
+        - "10 activities: mazes, dot-to-dot, spot the difference, word tracing and more"
+        - "Printed on one side only, so markers won't ruin the next picture"
+        - "Answers at the back"
+      closing: "Find what makes YOU happy!"
   zh:
     title_zh: "週末做什麼？"
     title: "What Shall We Do This Weekend?"
     subtitle: "Bilingual Chinese (Zhuyin) and English Coloring Book, Ages 6-9"
+    front:
+      title_zh: "週末做什麼？"
+      title_lines: ["What Shall We Do This Weekend?"]
+      subtitle: "中英雙語・注音版　Chinese & English"
+      badge: ["6-9 歲", "Ages 6-9"]
+    back:
+      headline: "手機和電視，先休息一下！"
+      text:
+        - "跟著三隻好奇的小貓，一起發現週末可以做的好玩事：畫畫、玩桌遊、做披薩、露營、騎腳踏車、跳舞……"
+        - "Phones and TV can wait! Join three curious cats and find out how much fun a weekend can be."
+      bullets:
+        - "15 張著色圖，每頁都有押韻童詩（中文附注音、英文對照）"
+        - "10 頁活動：迷宮、連連看、找不同、描字……"
+        - "單面印刷，麥克筆不會透到下一張圖"
+        - "書末附解答 Answers included"
+      closing: "找到讓你開心的事！Find what makes YOU happy!"
+cover:
+  art: cover/front_art.png       # 封面主圖（彩色，3:4）
+  samples: [p04, p07, p11]       # 封底的內頁樣張
+  back_color: "#cfe7f8"
+  text_color: "#1f3a5f"
+  accent: "#e4572e"
+  badge_color: "#ffd23f"
 # 注音修正：自動標注不對的字詞寫在這裡（字或詞: 每個字的注音，用空白分開）
 zhuyin:
   得: "˙ㄉㄜ"          # 跑得、笑得、好得、飛得：助詞，讀輕聲
