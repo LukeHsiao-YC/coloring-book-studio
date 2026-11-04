@@ -29,8 +29,23 @@ def clean_and_vectorize(raw: Path, clean_dir: Path, vector_dir: Path, page_id: s
     # 2x upscale gives potrace smoother curves; Otsu picks the black/white cut
     g2 = cv2.resize(g, (w0 * 2, h0 * 2), interpolation=cv2.INTER_CUBIC)
     g2 = cv2.GaussianBlur(g2, (3, 3), 0)
-    _, bw = cv2.threshold(g2, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    ink = (bw == 0).astype(np.uint8)
+    t, bw = cv2.threshold(g2, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    strong = (bw == 0).astype(np.uint8)
+    # hysteresis: faint grey strokes are kept when they connect to a solid black line
+    # (AI images sometimes fade a line out); isolated grey patches such as shaded blush are dropped
+    faint = ((g2 < config.FAINT_INK_LEVEL) & (strong == 0)).astype(np.uint8)
+    n_f, lab_f = cv2.connectedComponents(faint, connectivity=8)
+    if n_f > 1:
+        thick = np.zeros(n_f)
+        np.maximum.at(thick, lab_f.ravel(), cv2.distanceTransform(faint, cv2.DIST_L2, 3).ravel())
+        near_black = cv2.dilate(strong, np.ones((3, 3), np.uint8)) > 0
+        touches = np.zeros(n_f, bool)
+        touches[np.unique(lab_f[near_black & (faint > 0)])] = True
+        keep = touches & (thick <= 6)          # thin and joined to a black line = a faded stroke
+        keep[0] = False
+        ink = ((strong > 0) | keep[lab_f]).astype(np.uint8)
+    else:
+        ink = strong
 
     # remove specks (scan dust, stray dots)
     speck = max(40, int(ink.size * 1e-5))

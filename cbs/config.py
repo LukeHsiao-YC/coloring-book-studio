@@ -33,6 +33,7 @@ PRICE_POINTS_USD = [5.99, 6.99, 7.99, 8.99, 9.99]
 
 # Thicken lines that come out thinner than the age preset's minimum (pixels on the 2x working image)
 AUTO_THICKEN = True
+FAINT_INK_LEVEL = 215    # grey up to this level counts as ink when it joins a black line
 AUTO_THICKEN_MAX_PX = 8
 
 # Our own safe zone for artwork (stricter than KDP's minimum, so nothing gets trimmed)

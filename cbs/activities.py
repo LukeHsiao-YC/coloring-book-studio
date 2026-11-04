@@ -374,9 +374,27 @@ def spot_draw(c, box, st, ctx):
     n = len(st["boxes"])
     below = title(c, s.get("title", f"Find {n} differences!"), x, y, w, h)
     gap = 0.3 * inch
-    slot = (below - y - gap) / 2
-    place_svg(c, st["original"], x, y + slot + gap, w, slot)
-    place_svg(c, st["changed"], x, y, w, slot)
+    W, H = st["size"]
+    avail = below - y
+    # pick the arrangement that gives each picture the larger scale
+    stacked = min(w / W, (avail - gap) / 2 / H)
+    side = min((w - gap) / 2 / W, avail / H)
+    if stacked >= side:
+        slot = (avail - gap) / 2
+        place_svg(c, st["original"], x, y + slot + gap, w, slot)
+        place_svg(c, st["changed"], x, y, w, slot)
+    else:
+        half = (w - gap) / 2
+        place_svg(c, st["original"], x, y, half, avail)
+        place_svg(c, st["changed"], x + half + gap, y, half, avail)
+        c.setFont(FONT, 12)
+        c.drawCentredString(x + half / 2, y + 2, "")
+    c.setLineWidth(1.5)
+    if not stacked >= side:
+        c.saveState()
+        c.setDash(4, 4)
+        c.line(x + w / 2, y + 0.2 * inch, x + w / 2, below - 0.1 * inch)
+        c.restoreState()
 
 
 def spot_answer(c, box, st, ctx):

@@ -1,0 +1,1 @@
+provider: manual (294a2632-image.jpg)

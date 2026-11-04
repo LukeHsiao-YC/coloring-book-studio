@@ -1,0 +1,1 @@
+provider: manual (12ba7a64-image.jpg)
