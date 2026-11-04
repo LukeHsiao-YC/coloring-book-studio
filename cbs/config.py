@@ -73,7 +73,9 @@ BASE_RULES = (
     "No shading, no gray tones, no color, no gradients, no hatching, no texture fill. "
     "Every area must be a closed shape that a child can color in. "
     "Portrait orientation, 3:4 aspect ratio. No border or frame. "
-    "Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image."
+    "Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. "
+    "The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: "
+    "the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them."
 )
 
 # ---------- Image generation defaults (change model names here when providers update them) ----------

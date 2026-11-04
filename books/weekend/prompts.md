@@ -5,7 +5,7 @@
 ## p01：What shall we do this weekend?
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -23,7 +23,7 @@ No text on the page other than the chest logo on the jackets.
 ## p02：Drawing
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -40,7 +40,7 @@ No text on the page other than the chest logo on the jackets.
 ## p03：Playing board games
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -58,7 +58,7 @@ No text on the page other than the chest logo on the jackets.
 ## p04：Cooking together
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -76,7 +76,7 @@ No text on the page other than the chest logo on the jackets.
 ## p05：Reading
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -93,7 +93,7 @@ No text on the page other than the chest logo on the jackets.
 ## p06：Listening to music
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -109,7 +109,7 @@ No text on the page other than the chest logo on the jackets.
 ## p07：Camping
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -127,7 +127,7 @@ No text on the page other than the chest logo on the jackets.
 ## p08：Riding bikes
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -144,7 +144,7 @@ No text on the page other than the chest logo on the jackets.
 ## p09：Going for a walk
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -162,7 +162,7 @@ No text on the page other than the chest logo on the jackets.
 ## p10：Dancing
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -180,7 +180,7 @@ No text on the page other than the chest logo on the jackets.
 ## p11：Playing at the park
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -198,7 +198,7 @@ No text on the page other than the chest logo on the jackets.
 ## p12：Visiting a flower shop
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -215,7 +215,7 @@ No text on the page other than the chest logo on the jackets.
 ## p13：Playing tag
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -233,7 +233,7 @@ No text on the page other than the chest logo on the jackets.
 ## p14：Playing catch
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
@@ -250,7 +250,7 @@ No text on the page other than the chest logo on the jackets.
 ## p15：Find what makes YOU happy!
 
 ```
-Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image.
+Children's coloring book page. Pure black line art on a pure white background. No shading, no gray tones, no color, no gradients, no hatching, no texture fill. Every area must be a closed shape that a child can color in. Portrait orientation, 3:4 aspect ratio. No border or frame. Leave a clear white margin on all four sides: nothing may touch or be cut off by the edges of the image. The image MUST be a tall portrait (taller than wide, 3:4), never landscape. Compose for a tall page: the characters are large and fill the middle, with more sky or wall above them and more ground or floor below them.
 
 Coloring page for ages 6 to 9. Medium-weight clean black outlines. Characters plus a simple scene background with at most 6 background objects. Keep every coloring area at least fingertip-sized. No scattered small decorations: no floating leaves, no sprinkled grass tufts, no confetti, no dense patterns.
 
