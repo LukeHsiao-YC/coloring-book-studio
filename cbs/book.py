@@ -26,6 +26,8 @@ class Page:
     notes: str = ""
     caption: str = ""
     type: str = "coloring"   # coloring, or an activity type (see cbs/activities.py)
+    text_en: list | None = None   # caption lines for the English edition
+    text_zh: list | None = None   # caption lines in Chinese (zhuyin edition)
     spec: dict | None = None  # the page's full entry from book.yaml
 
 
@@ -49,12 +51,20 @@ class Book:
         self.back_page = d.get("back_page", "note")      # blank / note
         self.answers = bool(d.get("answers", True))       # answer page for mazes and spot-the-difference
         self.price = d.get("price")
+        # editions: {"en": {...}, "zh": {...}}; zh = Chinese with zhuyin + English
+        self.editions = d.get("editions") or {"en": {}}
+        for k in self.editions:
+            if k not in ("en", "zh"):
+                raise SystemExit(f"editions 只支援 en 和 zh，不認得 '{k}'")
+        self.zhuyin = {str(k): str(v) for k, v in (d.get("zhuyin") or {}).items()}
         self.cast = Cast(d["cast"]) if d.get("cast") else None
         self.pages = [
             Page(id=str(p["id"]), scene=p.get("scene", ""), characters=p.get("characters", []),
                  age=str(p.get("age", self.age)), provider=p.get("provider", self.provider),
                  use=p.get("use"), notes=p.get("notes", ""), caption=p.get("caption", ""),
-                 type=p.get("type", "coloring"), spec=p)
+                 type=p.get("type", "coloring"), spec=p,
+                 text_en=p.get("text_en") or ([p["caption"]] if p.get("caption") else []),
+                 text_zh=p.get("text_zh") or [])
             for p in d.get("pages", [])
         ]
         for sub in ("raw", "clean", "vector", "out"):

@@ -86,6 +86,28 @@ open -e .env                             # 填入 GEMINI_API_KEY / OPENAI_API_KE
 
 `report.txt` 最後有定價試算。印刷成本在 `cbs/config.py` 的 `PRINT_FIXED_USD`，上傳 KDP 後請用官方計算機核對並更新。
 
+## 雙版本：英文版與雙語注音版
+
+book.yaml 的 `editions:` 決定要輸出哪些版本，`build` 會分別輸出到 `out/en/` 和 `out/zh/`：
+
+```yaml
+editions:
+  en:
+    title: "What Shall We Do This Weekend?"
+  zh:
+    title_zh: "週末做什麼？"
+    title: "What Shall We Do This Weekend?"
+```
+
+- 著色頁的文字：`text_en: [第一行, 第二行]`、`text_zh: [第一行, 第二行]`
+- 活動頁：`title` / `title_zh`、`text` / `text_zh`、`ideas` / `ideas_zh`、`lines` / `lines_zh`
+- 注音由程式自動標在每個字右邊（台灣課本格式），字型是可商用的 jf 粉圓體（`fonts/`，SIL OFL）。
+- 「一」「不」統一標本調。
+- 自動標錯的字詞寫進 `zhuyin:`，例如 `音樂: "ㄧㄣ ㄩㄝˋ"`（每個字一組，用空白分開）。
+- 每次 build 會產生 `out/zh/zhuyin_check.md` 校對表：⚠ 是要特別確認的字，✎ 是已人工修正的字。
+
+注意：KDP 平裝本不支援把書的語言設成繁體中文，雙語版上架時語言選英文。
+
 ## 規格檢查（report.txt）
 
 - `✗` 錯誤：上傳 KDP 會被退件（頁數不足 24、尺寸不對、字型未內嵌等），必須修正。

@@ -116,18 +116,41 @@ def pricing(pages: int) -> str:
     return "\n".join(lines)
 
 
+def zh_lines(b) -> list[tuple[str, str]]:
+    """Every Chinese string printed in the zhuyin edition, for the proof sheet."""
+    from .i18n import TEXT
+    out = []
+    for p in b.pages:
+        sp = p.spec or {}
+        if isinstance(p.text_zh, list):
+            for ln in p.text_zh:
+                out.append((p.id, ln))
+        for key in ("title_zh", "text_zh"):
+            if isinstance(sp.get(key), str):
+                out.append((p.id, sp[key]))
+        for key in ("ideas_zh", "lines_zh", "days_zh", "slots_zh"):
+            for ln in sp.get(key) or []:
+                out.append((p.id, ln))
+    for key, v in TEXT.items():
+        zh = v.get("zh")
+        if key == "back_note" or not zh:
+            continue
+        for ln in (zh if isinstance(zh, list) else [zh]):
+            out.append(("固定文字", ln))
+    return out
+
+
 def cmd_build(a):
+    from .activities import ACTIVITIES
     from .clean import clean_and_vectorize
     from .layout import art_box, build_cover, build_interior
     from .preflight import check_interior
     from .preview import contact_sheet
 
-    from .activities import ACTIVITIES
-
     b = Book(a.book)
     box = art_box(b.trim)
     metrics, rows, missing = [], [], []
-    items = {}
+    art = {}
     # pass 1: coloring pages (activities such as spot-the-difference reuse their cleaned art)
     for p in b.pages:
         if p.type != "coloring":
@@ -140,7 +163,7 @@ def cmd_build(a):
             continue
         m = clean_and_vectorize(raw, b.dir / "clean", b.dir / "vector", p.id, p.age, box)
         metrics.append(m)
-        items[p.id] = dict(kind="art", svg=Path(m["svg"]), caption=p.caption)
+        art[p.id] = dict(kind="art", svg=Path(m["svg"]), text_en=p.text_en, text_zh=p.text_zh)
         side = raw.with_suffix(".txt")
         prov = side.read_text(encoding="utf-8").split(":", 1)[1].strip() if side.exists() else "?"
         rows.append(dict(page=p.id, version=raw.stem.rsplit("_v", 1)[1], provider=prov.split(" ")[0],
@@ -148,52 +171,76 @@ def cmd_build(a):
         thick = f"（原 {m['original_stroke_mm']} mm，已加粗）" if m["stroke_mm"] != m["original_stroke_mm"] else ""
         print(f"✓ {p.id}  線條 {m['stroke_mm']} mm{thick}  小區塊 {m['tiny_regions']}  灰階 {m['gray_pct']}%")
 
-    # pass 2: activity pages
-    answers = []
+    # pass 2: activity pages (prepared once, drawn per edition)
     icons = b.cast.icons if b.cast else {}
+    prepared = {}
     for p in b.pages:
         if p.type == "coloring":
             continue
-        prepare, draw, answer = ACTIVITIES[p.type]
-        ctx = dict(book=b, page=p, spec=p.spec or {}, icons=icons)
-        state = prepare(ctx) if prepare else {}
-        items[p.id] = dict(kind="activity", draw=lambda c, bx, d=draw, s=state, x=ctx: d(c, bx, s, x))
-        if answer and b.answers:
-            label = (p.spec or {}).get("title") or p.type
-            answers.append((label, lambda c, bx, f=answer, s=state, x=ctx: f(c, bx, s, x)))
+        prepare, _, _ = ACTIVITIES[p.type]
+        base_ctx = dict(book=b, page=p, spec=p.spec or {}, icons=icons, lang="en", zhuyin=b.zhuyin)
+        prepared[p.id] = prepare(base_ctx) if prepare else {}
         print(f"✓ {p.id}  活動頁：{p.type}")
-    ordered = [items[p.id] for p in b.pages if p.id in items]
-    if not ordered:
-        sys.exit("沒有任何頁面可以排版")
 
-    out = b.dir / "out"
-    interior = out / "interior.pdf"
-    n = build_interior(b.trim, ordered, b.front_matter, b.blank_backs, interior,
-                       back_note=(b.back_page == "note"), answers=answers)
-    errors, warns = check_interior(interior, b.trim, metrics, {p.id: p.age for p in b.pages})
-    if missing:
-        warns.insert(0, f"尚無圖片、未排入的頁面：{', '.join(missing)}")
+    out_root = b.dir / "out"
     for r in rows:
-        r["warn_count"] = sum(1 for w in warns if w.startswith(r["page"] + ":"))
-    contact_sheet(rows, out / "preview.png")
+        r["warn_count"] = 0
+    all_reports = []
+    for ed, meta in b.editions.items():
+        lang = ed
+        out = out_root / ed
+        out.mkdir(parents=True, exist_ok=True)
+        items, answers = {}, []
+        for p in b.pages:
+            if p.id in art:
+                items[p.id] = art[p.id]
+            elif p.id in prepared:
+                _, draw, answer = ACTIVITIES[p.type]
+                ctx = dict(book=b, page=p, spec=p.spec or {}, icons=icons, lang=lang, zhuyin=b.zhuyin)
+                st = prepared[p.id]
+                items[p.id] = dict(kind="activity", draw=lambda c, bx, d=draw, s=st, x=ctx: d(c, bx, s, x))
+                if answer and b.answers:
+                    sp = p.spec or {}
+                    answers.append((sp.get("title") or p.type, sp.get("title_zh"),
+                                    lambda c, bx, f=answer, s=st, x=ctx: f(c, bx, s, x)))
+        ordered = [items[p.id] for p in b.pages if p.id in items]
+        if not ordered:
+            sys.exit("沒有任何頁面可以排版")
+        interior = out / "interior.pdf"
+        n = build_interior(b.trim, ordered, b.front_matter, b.blank_backs, interior,
+                           back_note=(b.back_page == "note"), answers=answers, lang=lang, overrides=b.zhuyin)
+        errors, warns = check_interior(interior, b.trim, metrics, {p.id: p.age for p in b.pages})
+        if missing:
+            warns.insert(0, f"尚無圖片、未排入的頁面：{', '.join(missing)}")
+        for r in rows:
+            r["warn_count"] = sum(1 for w in warns if w.startswith(r["page"] + ":"))
 
-    cover_id = b.data.get("cover_page") or b.pages[0].id
-    cover_svg = b.dir / "vector" / f"{cover_id}.svg"
-    size = build_cover(b.trim, n, b.paper, b.title, b.data.get("subtitle", ""), b.data.get("author", ""),
-                       cover_svg if cover_svg.exists() else None, out / "cover.pdf")
-    (out / "metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=1), encoding="utf-8")
-
-    lines = [f"內頁：{n} 頁 → out/interior.pdf",
-             f"封面：{size['width_in']} x {size['height_in']} 吋，書脊 {size['spine_in']} 吋"
-             f"（{'可' if size['spine_text_allowed'] else '不可'}放書脊文字）→ out/cover.pdf",
-             "預覽：out/preview.png", ""]
-    lines += [f"✗ {e}" for e in errors] or ["✓ 沒有會被 KDP 退件的錯誤"]
-    lines += [f"! {w}" for w in warns]
-    n_designs = len(ordered)
-    lines += ["", f"設計數：{n_designs}（著色 {len(metrics)}、活動 {n_designs - len(metrics)}）", "", pricing(n)]
-    report = "\n".join(lines)
-    (out / "report.txt").write_text(report, encoding="utf-8")
-    print("\n" + report)
+        title = meta.get("title", b.title)
+        cover_id = b.data.get("cover_page") or b.pages[0].id
+        cover_svg = b.dir / "vector" / f"{cover_id}.svg"
+        size = build_cover(b.trim, n, b.paper, title, meta.get("subtitle", b.data.get("subtitle", "")),
+                           b.data.get("author", ""), cover_svg if cover_svg.exists() else None,
+                           out / "cover.pdf", title_zh=meta.get("title_zh", "") if lang == "zh" else "")
+        extra = []
+        if lang == "zh":
+            from .zhuyin import check_table
+            check_table(zh_lines(b), b.zhuyin, out / "zhuyin_check.md")
+            extra = [f"注音校對表：out/{ed}/zhuyin_check.md"]
+        name = {"en": "英文版", "zh": "雙語注音版"}[lang]
+        lines = [f"【{name}】{meta.get('title_zh', '') + ' ' if lang == 'zh' else ''}{title}",
+                 f"內頁：{n} 頁 → out/{ed}/interior.pdf",
+                 f"封面：{size['width_in']} x {size['height_in']} 吋，書脊 {size['spine_in']} 吋"
+                 f"（{'可' if size['spine_text_allowed'] else '不可'}放書脊文字）→ out/{ed}/cover.pdf"] + extra + [""]
+        lines += [f"✗ {e}" for e in errors] or ["✓ 沒有會被 KDP 退件的錯誤"]
+        lines += [f"! {w}" for w in warns]
+        n_designs = len(ordered)
+        lines += ["", f"設計數：{n_designs}（著色 {len(metrics)}、活動 {n_designs - len(metrics)}）", "", pricing(n)]
+        report = "\n".join(lines)
+        (out / "report.txt").write_text(report, encoding="utf-8")
+        all_reports.append(report)
+    contact_sheet(rows, out_root / "preview.png")
+    (out_root / "metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=1), encoding="utf-8")
+    print("\n預覽：out/preview.png\n\n" + "\n\n".join(all_reports))
 
 
 def main():

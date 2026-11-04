@@ -23,6 +23,60 @@ FONT, BOLD = "CBS", "CBS-Bold"
 
 
 # ---------------------------------------------------------------- helpers
+def heading(c, ctx, x, y, w, h, default_en, default_zh=None, size=30):
+    """Page title for the current edition; returns the y below the title band."""
+    from .layout import heading_text
+    s = ctx["spec"]
+    en = s.get("title", default_en)
+    zh = s.get("title_zh", default_zh)
+    if ctx["lang"] == "zh" and zh:
+        below = heading_text(c, "zh", en, zh, x + w / 2, y + h, 26, w, ctx["zhuyin"])
+        return below - 0.12 * inch
+    return title(c, en, x, y, w, h, size)
+
+
+def sub(c, ctx, en, zh, x, ybase, w, size=14):
+    """One-line instruction under a title, in the edition's language."""
+    if ctx["lang"] == "zh" and zh:
+        from . import zhuyin as Z
+        Z.draw_centered(c, zh, x + w / 2, ybase - 2, size, w, ctx["zhuyin"])
+    elif en:
+        subtitle(c, en, x, ybase, w, size)
+
+
+def sub_below(c, ctx, en, zh, x, below, w, size=14):
+    """Instruction line under the title. English fits inside the title band; the Chinese
+    edition's title is taller, so the line goes underneath and the content moves down."""
+    if ctx["lang"] == "zh" and zh:
+        sub(c, ctx, en, zh, x, below - size * 0.4, w, size)
+        return below - size * 2.0
+    if en:
+        subtitle(c, en, x, below + 2, w, size)
+        return below - size * 0.9
+    return below
+
+
+def label(c, ctx, text, x, y, size, bold=False):
+    """Left-aligned label; Chinese gets zhuyin. Returns the end x."""
+    from . import zhuyin as Z
+    if ctx["lang"] == "zh" and Z.HAN.search(text):
+        return Z.draw_left(c, text, x, y, size, ctx["zhuyin"])
+    f = BOLD if bold else FONT
+    c.setFont(f, size)
+    c.drawString(x, y, text)
+    return x + c.stringWidth(text, f, size)
+
+
+def pick(ctx, key, default_en, default_zh=None):
+    """Value of `key` for this edition: `key_zh` in the Chinese edition when present."""
+    s = ctx["spec"]
+    if ctx["lang"] == "zh":
+        v = s.get(key + "_zh", default_zh)
+        if v is not None:
+            return v
+    return s.get(key, default_en)
+
+
 def title(c, text, x, y, w, h, size=30):
     """Title centred in the top band of the box; returns the y below the band."""
     top = y + h
@@ -199,9 +253,9 @@ def _draw_maze_grid(c, st, x, y, w, h, solution=False):
 def maze_draw(c, box, st, ctx):
     x, y, w, h = box
     s = ctx["spec"]
-    below = title(c, s.get("title", "Find the way!"), x, y, w, h)
-    if s.get("text"):
-        subtitle(c, s["text"], x, below + 0.25 * inch, w)
+    below = heading(c, ctx, x, y, w, h, "Find the way!")
+    if s.get("text") or s.get("text_zh"):
+        below = sub_below(c, ctx, s.get("text"), s.get("text_zh"), x, below, w)
     band = 1.15 * inch
     x0, ytop, cell, mw, mh = _draw_maze_grid(c, st, x, y + band, w, below - y - 2 * band)
     icon(c, ctx, s.get("start"), x0 + cell / 2, ytop + 0.08 * inch, band - 0.2 * inch, align="center")
@@ -217,7 +271,7 @@ def maze_answer(c, box, st, ctx):
 def tracing_draw(c, box, st, ctx):
     x, y, w, h = box
     s = ctx["spec"]
-    below = title(c, s.get("title", "Trace the words"), x, y, w, h)
+    below = heading(c, ctx, x, y, w, h, "Trace the words")
     words = [str(t).upper() for t in s.get("words", [])][:5]
     if not words:
         raise SystemExit(f"{ctx['page'].id}: tracing 需要 words")
@@ -293,9 +347,9 @@ def _shape(name):
 def dots_draw(c, box, st, ctx):
     x, y, w, h = box
     s = ctx["spec"]
-    below = title(c, s.get("title", "Connect the dots"), x, y, w, h)
-    if s.get("text"):
-        subtitle(c, s["text"], x, below + 0.25 * inch, w)
+    below = heading(c, ctx, x, y, w, h, "Connect the dots")
+    if s.get("text") or s.get("text_zh"):
+        below = sub_below(c, ctx, s.get("text"), s.get("text_zh"), x, below, w)
     pts = _shape(s.get("shape", "star"))
     band = 1.4 * inch
     area = min(w * 0.85, below - y - band - 0.3 * inch)
@@ -404,7 +458,7 @@ def spot_draw(c, box, st, ctx):
     x, y, w, h = box
     s = ctx["spec"]
     n = len(st["boxes"])
-    below = title(c, s.get("title", f"Find {n} differences!"), x, y, w, h)
+    below = heading(c, ctx, x, y, w, h, f"Find {n} differences!")
     gap = 0.3 * inch
     W, H = st["size"]
     avail = below - y
@@ -442,74 +496,88 @@ def spot_answer(c, box, st, ctx):
 
 # ---------------------------------------------------------------- plan, draw, challenge
 def plan_draw(c, box, st, ctx):
+    from .i18n import t
     x, y, w, h = box
     s = ctx["spec"]
-    below = title(c, s.get("title", "My Weekend Plan"), x, y, w, h)
-    days = s.get("days", ["Saturday", "Sunday"])
-    slots = s.get("slots", ["Morning", "Afternoon", "Evening"])
-    ideas = s.get("ideas", [])
-    grid_h = (below - y) * (0.58 if ideas else 0.95)
-    head = 0.4 * inch
+    lang = ctx["lang"]
+    below = heading(c, ctx, x, y, w, h, "My Weekend Plan")
+    days = pick(ctx, "days", t("plan_days", "en"), t("plan_days", "zh"))
+    slots = pick(ctx, "slots", t("plan_slots", "en"), t("plan_slots", "zh"))
+    ideas = pick(ctx, "ideas", [], None) or []
+    grid_h = (below - y) * (0.55 if ideas else 0.95)
+    head = 0.5 * inch if lang == "zh" else 0.4 * inch
     col_w = (w - 0.15 * inch * (len(days) - 1)) / len(days)
     row_h = (grid_h - head) / len(slots)
+    from . import zhuyin as Z
     for j, d in enumerate(days):
         cx = x + j * (col_w + 0.15 * inch)
-        c.setFont(BOLD, 20)
-        c.drawCentredString(cx + col_w / 2, below - head + 8, d)
+        if lang == "zh":
+            Z.draw_centered(c, d, cx + col_w / 2, below - head + 10, 19, col_w, ctx["zhuyin"])
+        else:
+            c.setFont(BOLD, 20)
+            c.drawCentredString(cx + col_w / 2, below - head + 8, d)
         for i, sl in enumerate(slots):
             top = below - head - i * row_h
             c.setLineWidth(LW * 0.8)
             c.roundRect(cx, top - row_h + 6, col_w, row_h - 6, 10)
-            c.setFont(FONT, 12)
-            c.drawString(cx + 8, top - 20, sl)
+            label(c, ctx, sl, cx + 8, top - 22, 12)
     if ideas:
         top = below - grid_h - 0.25 * inch
-        c.setFont(BOLD, 18)
-        c.drawString(x, top - 16, s.get("ideas_title", "Things I want to try:"))
+        label(c, ctx, pick(ctx, "ideas_title", t("ideas_title", "en"), t("ideas_title", "zh")),
+              x, top - 18, 17, bold=True)
         per_col = math.ceil(len(ideas) / 2)
-        line_h = min(0.42 * inch, (top - 0.3 * inch - y - 1.0 * inch) / per_col)
+        line_h = min(0.46 * inch, (top - 0.3 * inch - y - 1.0 * inch) / per_col)
         for i, it in enumerate(ideas):
             colx = x + (i // per_col) * w / 2
-            checkbox(c, colx, top - 0.55 * inch - (i % per_col) * line_h, 14, it, 13)
+            yy = top - 0.6 * inch - (i % per_col) * line_h
+            c.setLineWidth(LW_THIN * 1.5)
+            c.roundRect(colx, yy, 14, 14, 3, stroke=1, fill=0)
+            label(c, ctx, it, colx + 22, yy + 2, 13)
     icon(c, ctx, s.get("icon"), x + w, y, 1.0 * inch, align="right")
 
 
 def draw_draw(c, box, st, ctx):
     x, y, w, h = box
     s = ctx["spec"]
-    below = title(c, s.get("title", "Draw your favorite weekend activity!"), x, y, w, h)
-    lines = s.get("lines", ["My favorite activity is"])
-    write_h = 0.55 * inch * len(lines) + 0.2 * inch
+    below = heading(c, ctx, x, y, w, h, "Draw your favorite weekend activity!")
+    lines = pick(ctx, "lines", ["My favorite activity is"], None)
+    step = 0.6 * inch
+    write_h = step * len(lines) + 0.2 * inch
     c.setLineWidth(LW)
     c.roundRect(x, y + write_h, w, below - y - write_h - 0.1 * inch, 18)
     for i, ln in enumerate(lines):
-        base = y + write_h - 0.55 * inch * (i + 1)
-        c.setFont(FONT, 15)
-        c.drawString(x, base + 4, ln)
+        base = y + write_h - step * (i + 1)
+        end = label(c, ctx, ln, x, base + 4, 15)
         c.setLineWidth(LW_THIN)
-        c.line(x + c.stringWidth(ln, FONT, 15) + 8, base, x + w, base)
+        c.line(end + 8, base, x + w, base)
     icon(c, ctx, s.get("icon"), x + w - 12, y + write_h + 12, 1.1 * inch, align="right")
 
 
 def challenge_draw(c, box, st, ctx):
+    from .i18n import t
     x, y, w, h = box
     s = ctx["spec"]
-    below = title(c, s.get("title", "Screen-Free Challenge"), x, y, w, h)
-    text = s.get("text", "Color a star each day you try a fun activity instead of a screen!")
-    subtitle(c, text, x, below + 0.2 * inch, w, 13)
-    days = s.get("days", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
+    lang = ctx["lang"]
+    below = heading(c, ctx, x, y, w, h, "Screen-Free Challenge")
+    below = sub_below(c, ctx, s.get("text", "Color a star each day you try a fun activity instead of a screen!"),
+                      s.get("text_zh"), x, below, w, 13)
+    days = pick(ctx, "days", t("week_days", "en"), t("week_days", "zh"))
+    did = t("i_did", lang)
     icon_h = 1.0 * inch
     row_h = (below - y - icon_h - 0.1 * inch) / len(days)
+    from . import zhuyin as Z
+    if lang == "zh":
+        day_w = max(Z.line_width(Z.annotate(d), 15) for d in days)
+    else:
+        day_w = max(c.stringWidth(d, BOLD, 15) for d in days)
     for i, d in enumerate(days):
         top = below - i * row_h
         mid = top - row_h / 2
-        c.setFont(BOLD, 15)
-        c.drawString(x, mid - 5, d)
-        lx = x + max(c.stringWidth(dd, BOLD, 15) for dd in days) + 14
-        c.setFont(FONT, 12)
-        c.drawString(lx, mid - 4, "I did:")
+        label(c, ctx, d, x, mid - 5, 15, bold=True)
+        lx = x + day_w + 14
+        end = label(c, ctx, did, lx, mid - 4, 12)
         c.setLineWidth(LW_THIN)
-        c.line(lx + c.stringWidth("I did:", FONT, 12) + 6, mid - 6, x + w - row_h * 1.1, mid - 6)
+        c.line(end + 6, mid - 6, x + w - row_h * 1.1, mid - 6)
         r = min(row_h * 0.42, 0.42 * inch)
         polygon(c, star_points(x + w - r - 2, mid, r))
         if i < len(days) - 1:

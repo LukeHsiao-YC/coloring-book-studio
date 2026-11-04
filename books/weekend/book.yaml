@@ -3,7 +3,25 @@
 # 結構：開場（無聊滑手機）→ 13 種活動 → 結尾（找到讓自己開心的事）＝ 15 張圖
 # 2026-11-03 起：15 張著色圖 + 10 頁活動（程式產生）＝ 25 個設計
 title: "What Shall We Do This Weekend?"
-subtitle: "A Coloring Book for Kids Ages 6-9"
+subtitle: "A Coloring and Activity Book for Kids Ages 6-9"
+# 兩個版本，共用同樣的圖和活動頁；build 會分別輸出到 out/en 和 out/zh
+editions:
+  en:
+    title: "What Shall We Do This Weekend?"
+    subtitle: "A Coloring and Activity Book for Kids Ages 6-9"
+  zh:
+    title_zh: "週末做什麼？"
+    title: "What Shall We Do This Weekend?"
+    subtitle: "Bilingual Chinese (Zhuyin) and English Coloring Book, Ages 6-9"
+# 注音修正：自動標注不對的字詞寫在這裡（字或詞: 每個字的注音，用空白分開）
+zhuyin:
+  得: "˙ㄉㄜ"          # 跑得、笑得、好得、飛得：助詞，讀輕聲
+  撒: "ㄙㄚˇ"         # 撒起司
+  骰子: "ㄊㄡˊ ˙ㄗ"    # 待確認：也有人讀ㄕㄞˇ˙ㄗ
+  期: "ㄑㄧˊ"          # 星期（台灣讀音）
+  音樂: "ㄧㄣ ㄩㄝˋ"
+  跟著: "ㄍㄣ ˙ㄓㄜ"
+  挑戰: "ㄊㄧㄠˇ ㄓㄢˋ"
 author: ""
 trim: 8.5x11
 paper: white
@@ -18,7 +36,8 @@ cover_page: p15
 
 pages:
   - id: p01
-    caption: "What shall we do this weekend?"
+    text_en: ["Phone and TV, is that all?", "Look outside, the weekend calls!"]
+    text_zh: ["手機滑呀滑，電視看呀看，", "週末別發呆，窗外在呼喚！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       Living room. Xiao Hei lies on the sofa looking bored at a smartphone, Xiao Bai sits on the floor
@@ -26,21 +45,24 @@ pages:
       with an excited face. Background: sofa, TV on a low cabinet, window with a tree outside, one rug.
 
   - id: p02
-    caption: "Drawing"
+    text_en: ["A splash of red, a dash of blue,", "I paint a flower just for you!"]
+    text_zh: ["畫筆輕輕刷，紅黃藍綠一起畫，", "小小畫板上，開出一朵花！"]
     characters: [小白, 小黃]
     scene: >-
       Xiao Bai stands at an easel painting a big simple flower with a brush. Xiao Huang sits nearby
       holding a sketchbook and a crayon, smiling. Background: a paint palette, a jar of brushes, a table.
 
   - id: p03
-    caption: "Playing board games"
+    text_en: ["Roll the dice and take your turn,", "win or lose, we laugh and learn!"]
+    text_zh: ["骰子轉呀轉，棋子跳一跳，", "輸贏沒關係，大家一起笑！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       All three cats sit around a low table playing a board game with a big game board, two large dice
       and a few game pieces. Xiao Hei is rolling the dice, Xiao Bai cheers, Xiao Huang thinks with a paw on its chin.
 
   - id: p04
-    caption: "Cooking together"
+    text_en: ["Roll the dough and spread the sauce,", "everybody helps, no one's the boss!"]
+    text_zh: ["麵團揉一揉，起司撒一撒，", "大家一起做，香噴噴的披薩！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       Kitchen. The three cats make a pizza together at a counter: Xiao Hei spreads sauce, Xiao Bai adds
@@ -48,7 +70,8 @@ pages:
       Background: an oven, a cooking pot, a big bowl.
 
   - id: p05
-    caption: "Reading"
+    text_en: ["Open a book and step right through,", "faraway places are waiting for you."]
+    text_zh: ["翻開一本書，故事跑出來，", "坐在家裡面，也能去看海！"]
     characters: [小黃, 小白]
     scene: >-
       Cozy reading corner. Xiao Huang sits on a big beanbag reading an open picture book. Xiao Bai lies on
@@ -57,17 +80,20 @@ pages:
   - id: a01
     type: tracing
     title: "Trace the words!"
+    title_zh: "描一描，寫一寫"
     words: [DRAW, PLAY, COOK, READ]
 
   - id: p06
-    caption: "Listening to music"
+    text_en: ["Headphones on and eyes closed tight,", "the music makes my heart feel light."]
+    text_zh: ["戴上耳機閉上眼，音符飄到我耳邊，", "跟著節奏點點頭，心情好得像晴天。"]
     characters: [小黑]
     scene: >-
       Xiao Hei sits cross-legged wearing big headphones, eyes half closed, enjoying music and tapping a paw.
       Next to it a record player. Four large music notes float in the air. Background: a window, a potted plant.
 
   - id: p07
-    caption: "Camping"
+    text_en: ["Moon and stars and campfire glow,", "toasting marshmallows, nice and slow."]
+    text_zh: ["月亮圓圓星星亮，營火旁邊暖洋洋，", "烤顆棉花糖，甜甜又香香！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       Night camping. A large triangle tent, a small campfire with big simple flames. Xiao Hei and Xiao Huang
@@ -80,37 +106,44 @@ pages:
     count: 5
     remove: [5, 20, 22, 25, 28]   # 編號見 out/a02_candidates.png：星星、小黑的 CAT、棉花糖烤痕、小黃的韓文字、小火焰
     title: "Find 5 differences at the campsite!"
+    title_zh: "營火旁，找出 5 個不一樣"
 
   - id: a03
     type: dot_to_dot
     shape: star
     icon: 小白
     title: "What's in the night sky?"
+    title_zh: "夜空裡有什麼？"
     text: "Connect the dots from 1 to 10."
+    text_zh: "從 1 連到 10"
 
   - id: p08
-    caption: "Riding bikes"
+    text_en: ["Helmet on, now pedal fast,", "feel the wind go whooshing past!"]
+    text_zh: ["戴好安全帽，雙腳踩踏板，", "風兒輕輕吹，騎車真好玩！"]
     characters: [小黑, 小黃]
     scene: >-
       Xiao Hei and Xiao Huang ride bicycles along a curving path, both wearing helmets, Xiao Huang waving.
       Background: rolling hills, two trees, a few big clouds.
 
   - id: p09
-    caption: "Going for a walk"
+    text_en: ["Take it slow and look around,", "little wonders can be found!"]
+    text_zh: ["慢慢走呀慢慢瞧，蝴蝶飛呀葉子飄，", "小路彎彎往前走，好多驚喜等你找！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       The three cats walk side by side along a path in the countryside. Xiao Bai holds a small leaf,
       Xiao Huang points at a butterfly. Background: a fence, two trees, one large butterfly, a few big clouds.
 
   - id: p10
-    caption: "Dancing"
+    text_en: ["When the music starts to play,", "wiggle, jump, and dance away!"]
+    text_zh: ["音樂響起來，大家動起來，", "扭一扭、跳一跳，笑得好開懷！"]
     characters: [小白, 小黑, 小黃]
     scene: >-
       Xiao Bai and Xiao Hei dance happily in a living room with arms up, Xiao Huang claps along.
       A speaker on the floor with three large music notes. Background: a curtain, one lamp.
 
   - id: p11
-    caption: "Playing at the park"
+    text_en: ["Swing up high and slide back down,", "the happiest place in all the town!"]
+    text_zh: ["盪鞦韆，溜滑梯，攀爬架上比一比，", "公園裡面真熱鬧，笑聲飛到天空裡！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       Playground. Xiao Huang slides down a big slide with arms up, Xiao Bai sits on a swing,
@@ -121,16 +154,19 @@ pages:
     start: 小黃
     goal: tree
     title: "Find the way to the park!"
+    title_zh: "找到去公園的路"
 
   - id: p12
-    caption: "Visiting a flower shop"
+    text_en: ["Roses, daisies, sweet to smell,", "take one home and treat it well!"]
+    text_zh: ["紅的花，黃的花，朵朵香香笑哈哈，", "挑一盆向日葵，開開心心帶回家！"]
     characters: [小白, 小黃]
     scene: >-
       Inside a small flower shop. Xiao Bai smells a big bouquet of large simple flowers, Xiao Huang carries
       a potted sunflower. Background: three buckets of large flowers, a shop counter, a hanging sign with no text.
 
   - id: p13
-    caption: "Playing tag"
+    text_en: ["I chase you and you chase me,", "tag, you're it! One, two, three!"]
+    text_zh: ["你來追，我來跑，", "跑得滿身汗，笑得停不了！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       Grassy field. Xiao Huang runs with arms stretched out trying to tag the others, Xiao Bai and Xiao Hei
@@ -139,10 +175,12 @@ pages:
   - id: a05
     type: tracing
     title: "Trace the words!"
+    title_zh: "描一描，寫一寫"
     words: [DANCE, WALK, CAMP, BIKE]
 
   - id: p14
-    caption: "Playing catch"
+    text_en: ["Toss it high and catch it, too,", "back and forth, from me to you!"]
+    text_zh: ["球兒拋呀拋，飛得高又高，", "你丟我來接，一起玩真好！"]
     characters: [小黑, 小黃]
     scene: >-
       Park. Xiao Hei throws a large ball high in the air, Xiao Huang jumps up with paws open to catch it.
@@ -152,17 +190,21 @@ pages:
     type: maze
     start: 小黑
     goal: ball
-    title: "Find the way to the ball!"
+    title: "Help find the ball!"
+    title_zh: "找一找，球在哪裡？"
 
   - id: a07
     type: dot_to_dot
     shape: heart
     icon: 小黃
     title: "What makes you happy?"
+    title_zh: "什麼讓你好開心？"
     text: "Connect the dots from 1 to 20."
+    text_zh: "從 1 連到 20"
 
   - id: p15
-    caption: "Find what makes YOU happy!"
+    text_en: ["Find the things that make YOU smile,", "that's the best weekend by a mile!"]
+    text_zh: ["畫畫、跳舞、看書、跑一跑，", "找到讓你開心的事，週末就是最美好！"]
     characters: [小黑, 小白, 小黃]
     scene: >-
       The three cats stand together smiling and waving at the reader. Around them, a few large simple objects
@@ -171,16 +213,22 @@ pages:
   - id: a08
     type: plan
     title: "My Weekend Plan"
+    title_zh: "我的週末計畫"
     icon: 小黃
     ideas: [Drawing, Board games, Cooking, Reading, Music, Camping, Riding a bike, Going for a walk, Dancing, The park]
+    ideas_zh: [畫畫, 玩桌遊, 一起做飯, 看書, 聽音樂, 露營, 騎腳踏車, 散步, 跳舞, 去公園]
 
   - id: a09
     type: draw
     title: "Draw your favorite weekend activity!"
+    title_zh: "畫出你最喜歡的週末活動"
     icon: 小白
     lines: ["My favorite activity is", "It makes me happy because"]
+    lines_zh: ["我最喜歡的活動是", "它讓我開心，因為"]
 
   - id: a10
     type: challenge
     title: "Screen-Free Challenge"
+    title_zh: "放下螢幕挑戰"
     text: "Color a star each day you try a fun activity instead of a screen!"
+    text_zh: "每天試一個不用螢幕的活動，就塗一顆星星！"

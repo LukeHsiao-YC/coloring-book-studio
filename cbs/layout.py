@@ -52,29 +52,54 @@ def place_svg(c, svg: Path, x: float, y: float, box_w: float, box_h: float):
 _draw_svg = place_svg
 
 
-BACK_NOTE = ("This page is left blank on purpose to stop markers bleeding through. "
-             "Tip: slide a sheet of paper behind the page you are coloring.")
+def _zh():
+    from . import zhuyin
+    return zhuyin
 
 
-def _back_note(c, pw, m):
+def heading_text(c, lang, en, zh, cx, top, size, max_w, overrides=None):
+    """English title, or Chinese (with zhuyin) above a smaller English line. Returns the y below."""
+    if lang == "zh" and zh:
+        Z = _zh()
+        Z.draw_centered(c, zh, cx, top - size, size, max_w, overrides)
+        es = size * 0.6
+        while c.stringWidth(en, "CBS-Bold", es) > max_w and es > 9:
+            es -= 0.5
+        c.setFont("CBS-Bold", es)
+        c.drawCentredString(cx, top - size * 1.55 - es, en)
+        return top - size * 1.6 - es * 1.3
+    s = size
+    while c.stringWidth(en, "CBS-Bold", s) > max_w and s > 12:
+        s -= 1
+    c.setFont("CBS-Bold", s)
+    c.drawCentredString(cx, top - s, en)
+    return top - s * 1.3
+
+
+def _back_note(c, pw, m, lang):
+    from .i18n import t
     c.setFont("CBS", 8.5)
-    c.drawCentredString(pw / 2, m, BACK_NOTE)
+    c.drawCentredString(pw / 2, m, t("back_note", "en"))
+    if lang == "zh":
+        c.setFont(_zh().ZH, 8.5)
+        c.drawCentredString(pw / 2, m + 12, t("back_note", "zh"))
 
 
-def _belongs_to(c, pw, ph):
-    c.setFont("CBS-Bold", 30)
-    c.drawCentredString(pw / 2, ph * 0.58, "This book belongs to:")
+def _belongs_to(c, pw, ph, lang, ov):
+    from .i18n import t
+    heading_text(c, lang, t("belongs_to", "en"), t("belongs_to", "zh"), pw / 2, ph * 0.62, 30, pw * 0.8, ov)
     c.setLineWidth(2)
     c.line(pw * 0.2, ph * 0.45, pw * 0.8, ph * 0.45)
 
 
-def _test_colors(c, pw, ph):
-    c.setFont("CBS-Bold", 26)
-    c.drawCentredString(pw / 2, ph - 1.4 * inch, "Test your colors")
+def _test_colors(c, pw, ph, lang, ov):
+    from .i18n import t
+    below = heading_text(c, lang, t("test_colors", "en"), t("test_colors", "zh"),
+                         pw / 2, ph - 0.9 * inch, 26, pw * 0.8, ov)
     c.setLineWidth(1.5)
     cols, rows, size, gap = 5, 6, 1.0 * inch, 0.25 * inch
     x0 = (pw - (cols * size + (cols - 1) * gap)) / 2
-    y0 = ph - 2.2 * inch - size
+    y0 = below - 0.3 * inch - size
     for r in range(rows):
         for k in range(cols):
             c.roundRect(x0 + k * (size + gap), y0 - r * (size + gap), size, size, 10)
@@ -83,14 +108,45 @@ def _test_colors(c, pw, ph):
 FRONT_MATTER = {"belongs_to": _belongs_to, "test_colors": _test_colors}
 
 
+def caption_height(lines_en, lines_zh, lang) -> float:
+    if lang == "zh" and lines_zh:
+        return len(lines_zh) * 29 + len(lines_en) * 16 + 14
+    return len(lines_en) * 24 + 10 if lines_en else 0
+
+
+def draw_caption(c, lines_en, lines_zh, lang, cx, bottom, max_w, overrides=None):
+    """Poem lines under the picture: English only, or Chinese (zhuyin) then English."""
+    y = bottom + caption_height(lines_en, lines_zh, lang) - 6
+    if lang == "zh" and lines_zh:
+        Z = _zh()
+        for ln in lines_zh:
+            y -= 29
+            Z.draw_centered(c, ln, cx, y + 6, 19.5, max_w, overrides)
+        size = 12.5
+        for ln in lines_en:
+            y -= 16
+            c.setFont("CBS", size)
+            c.drawCentredString(cx, y + 3, ln)
+        return
+    size = 17
+    for ln in lines_en:
+        s = size
+        while c.stringWidth(ln, "CBS-Bold", s) > max_w and s > 11:
+            s -= 0.5
+        y -= 24
+        c.setFont("CBS-Bold", s)
+        c.drawCentredString(cx, y + 4, ln)
+
+
 def build_interior(trim: str, items: list[dict], front_matter: list[str], blank_backs: bool, out: Path,
-                   back_note: bool = True, answers: list[tuple] | None = None) -> int:
-    """items: dict(kind="art", svg=Path, caption=str) or dict(kind="activity", draw=fn(c, box)).
-    answers: list of (label, fn(c, box)) drawn on answer pages at the end."""
+                   back_note: bool = True, answers: list[tuple] | None = None,
+                   lang: str = "en", overrides: dict | None = None) -> int:
+    """items: dict(kind="art", svg, text_en=[...], text_zh=[...]) or dict(kind="activity", draw=fn(c, box)).
+    answers: list of (label_en, label_zh, fn(c, box)) drawn on answer pages at the end."""
+    from .i18n import t
     pw, ph = (v * inch for v in config.TRIM_SIZES[trim])
     bw, bh = (v * inch for v in art_box(trim))
     m = margin(trim) * inch
-    cb = caption_band(trim) * inch
     c = canvas.Canvas(str(out), pagesize=(pw, ph), pageCompression=1, initialFontName="CBS")
     c.setTitle("")
     c.setAuthor("")
@@ -105,13 +161,13 @@ def build_interior(trim: str, items: list[dict], front_matter: list[str], blank_
     def back():
         if blank_backs:
             if back_note:
-                _back_note(c, pw, m)
+                _back_note(c, pw, m, lang)
             blank()
 
     for fm in front_matter:
         if fm not in FRONT_MATTER:
             raise SystemExit(f"front_matter 不認得 '{fm}'，可用：{list(FRONT_MATTER)}")
-        FRONT_MATTER[fm](c, pw, ph)
+        FRONT_MATTER[fm](c, pw, ph, lang, overrides)
         blank()
         if blank_backs:
             blank()
@@ -120,32 +176,31 @@ def build_interior(trim: str, items: list[dict], front_matter: list[str], blank_
             c.saveState()
             it["draw"](c, (m, m, bw, bh))
             c.restoreState()
-        elif it.get("caption"):        # caption sits under the art, inside the safe margin
-            cap = it["caption"]
-            size = 26 if cb >= 0.75 * inch else 18
-            while c.stringWidth(cap, "CBS-Bold", size) > bw and size > 14:
-                size -= 1
-            c.setFont("CBS-Bold", size)
-            c.drawCentredString(pw / 2, m + 0.1 * inch, cap)
-            place_svg(c, it["svg"], m, m + cb, bw, bh - cb)
         else:
-            place_svg(c, it["svg"], m, m, bw, bh)
+            en, zh = it.get("text_en") or [], it.get("text_zh") or []
+            capt = caption_height(en, zh, lang)
+            if capt:
+                draw_caption(c, en, zh, lang, pw / 2, m, bw, overrides)
+            place_svg(c, it["svg"], m, m + capt + (0.1 * inch if capt else 0), bw, bh - capt - (0.1 * inch if capt else 0))
         blank()
         back()
     # answer pages: up to two answers per page
     answers = answers or []
     for i in range(0, len(answers), 2):
-        c.setFont("CBS-Bold", 28)
-        c.drawCentredString(pw / 2, ph - m - 28, "Answers")
-        top = ph - m - 0.7 * inch
+        top = heading_text(c, lang, t("answers", "en"), t("answers", "zh"), pw / 2, ph - m, 28, bw, overrides)
+        top -= 0.1 * inch
         chunk = answers[i:i + 2]
         slot = (top - m) / 2
-        for j, (label, fn) in enumerate(chunk):
+        for j, (label_en, label_zh, fn) in enumerate(chunk):
             sy = top - (j + 1) * slot
-            c.setFont("CBS-Bold", 15)
-            c.drawString(m, sy + slot - 18, label)
+            label = label_zh if (lang == "zh" and label_zh) else label_en
+            if lang == "zh" and label_zh:
+                _zh().draw_left(c, label, m, sy + slot - 20, 14, overrides)
+            else:
+                c.setFont("CBS-Bold", 15)
+                c.drawString(m, sy + slot - 18, label)
             c.saveState()
-            fn(c, (m, sy + 0.1 * inch, bw, slot - 0.5 * inch))
+            fn(c, (m, sy + 0.1 * inch, bw, slot - 0.55 * inch))
             c.restoreState()
         blank()
     if pages % 2:                      # end on an even page count
@@ -163,7 +218,7 @@ def cover_size(trim: str, pages: int, paper: str) -> dict:
 
 
 def build_cover(trim: str, pages: int, paper: str, title: str, subtitle: str, author: str,
-                front_svg: Path | None, out: Path) -> dict:
+                front_svg: Path | None, out: Path, title_zh: str = "") -> dict:
     """Simple black-and-white cover wrap (back | spine | front). Good for proofs; a designed
     color cover can replace it later using the same size numbers."""
     size = cover_size(trim, pages, paper)
@@ -177,11 +232,23 @@ def build_cover(trim: str, pages: int, paper: str, title: str, subtitle: str, au
     c.setCreator("")
     safe = 0.375 * inch
     # front: title, art, author
-    c.setFont("CBS-Bold", 40)
-    c.drawCentredString(front_x + tw * inch / 2, H - b - safe - 50, title)
+    cx = front_x + tw * inch / 2
+    ytop = H - b - safe
+    if title_zh:
+        c.setFont(_zh().ZH, 44)
+        c.drawCentredString(cx, ytop - 46, title_zh)
+        ytop -= 56
+    ts = 40 if not title_zh else 26
+    while c.stringWidth(title, "CBS-Bold", ts) > tw * inch - 2 * safe and ts > 14:
+        ts -= 1
+    c.setFont("CBS-Bold", ts)
+    c.drawCentredString(cx, ytop - ts - 6, title)
     if subtitle:
-        c.setFont("CBS", 20)
-        c.drawCentredString(front_x + tw * inch / 2, H - b - safe - 85, subtitle)
+        ss = 18
+        while c.stringWidth(subtitle, "CBS", ss) > tw * inch - 2 * safe and ss > 9:
+            ss -= 0.5
+        c.setFont("CBS", ss)
+        c.drawCentredString(cx, ytop - ts - 6 - ss * 1.9, subtitle)
     if front_svg:
         _draw_svg(c, front_svg, front_x + 0.9 * inch, b + 1.3 * inch, tw * inch - 1.8 * inch, th * inch - 3.4 * inch)
     if author:
