@@ -85,7 +85,7 @@ pages:
     type: dot_to_dot
     shape: star
     icon: 小白
-    title: "What does Xiao Bai see in the sky?"
+    title: "What's in the night sky?"
     text: "Connect the dots from 1 to 10."
 
   - id: p08
@@ -120,7 +120,7 @@ pages:
     type: maze
     start: 小黃
     goal: tree
-    title: "Help Xiao Huang get to the park!"
+    title: "Find the way to the park!"
 
   - id: p12
     caption: "Visiting a flower shop"
@@ -152,13 +152,13 @@ pages:
     type: maze
     start: 小黑
     goal: ball
-    title: "Help Xiao Hei find the ball!"
+    title: "Find the way to the ball!"
 
   - id: a07
     type: dot_to_dot
     shape: heart
     icon: 小黃
-    title: "What makes Xiao Huang happy?"
+    title: "What makes you happy?"
     text: "Connect the dots from 1 to 20."
 
   - id: p15
